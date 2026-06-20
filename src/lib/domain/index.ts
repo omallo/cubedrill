@@ -39,6 +39,29 @@ export interface CaseInSet {
   label: string;
 }
 
+/** A contiguous run of cases sharing a group (group is undefined for ungrouped). */
+export interface CaseGroup {
+  group?: SetGroup;
+  cases: CaseInSet[];
+}
+
+/**
+ * Cases in a set partitioned into their groups, in learning-path order. Cases
+ * without a group are collected into a trailing `group: undefined` section.
+ */
+export function caseGroupsInSet(setId: string): CaseGroup[] {
+  const groups: CaseGroup[] = [];
+  for (const item of casesInSet(setId)) {
+    const last = groups[groups.length - 1];
+    if (last && last.group?.id === item.group?.id) {
+      last.cases.push(item);
+    } else {
+      groups.push({ group: item.group, cases: [item] });
+    }
+  }
+  return groups;
+}
+
 /** All cases in a set, ordered by group order then in-group order. */
 export function casesInSet(setId: string): CaseInSet[] {
   const set = setById.get(setId);

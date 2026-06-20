@@ -1,4 +1,6 @@
 import type { Catalog, Method, Phase, Tag } from './types';
+import { f2lStandardSet, f2lStandardCases, f2lStandardMemberships } from './data/f2l';
+import { ollSet, ollCases, ollMemberships } from './data/oll';
 import { pllSet, pllCases, pllMemberships } from './data/pll';
 
 /**
@@ -72,8 +74,8 @@ const tags: Tag[] = [];
 export const catalog: Catalog = {
   methods: [cfop],
   phases,
-  sets: [pllSet],
-  cases: [...pllCases],
-  memberships: [...pllMemberships],
+  sets: [f2lStandardSet, ollSet, pllSet],
+  cases: [...f2lStandardCases, ...ollCases, ...pllCases],
+  memberships: [...f2lStandardMemberships, ...ollMemberships, ...pllMemberships],
   tags
 };

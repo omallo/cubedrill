@@ -125,6 +125,12 @@ counts** toward Full OLL, because it's the same case.
 
 ## Status of this model
 
-Seeded and validated with **Full PLL** (21 cases, 3 groups, 55 algorithms).
-Next: seed **Full OLL** (from jperm data) and **Standard F2L** (FR + BR, derived
-FL/BL), then design the Library view on top.
+Seeded and validated with three sets:
+
+- **Full PLL** — 21 cases, 3 groups (from jperm data).
+- **Full OLL** — 57 cases, 15 shape groups (from jperm data).
+- **Standard F2L** — 41 cases, 6 piece-configuration groups (from the PoC); FR
+  authored on all, BR on 30/41, FL/BL derived at render time.
+
+Next: design the **Library view** on top. Pending data curation: the remaining
+11 BR F2L algorithms, plus reviewing the seeded algorithm choices.

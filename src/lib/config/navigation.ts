@@ -1,12 +1,4 @@
-import {
-  LayoutDashboard,
-  Library,
-  Dumbbell,
-  WandSparkles,
-  Timer,
-  ChartColumn,
-  Settings
-} from 'lucide-svelte';
+import { LayoutDashboard, Blocks, WandSparkles, Timer, ChartColumn, Settings } from 'lucide-svelte';
 import type { IconComponent } from '$lib/types';
 
 export interface NavItem {
@@ -43,16 +35,10 @@ export const primaryNav: NavSection[] = [
     title: 'Practice',
     items: [
       {
-        label: 'Library',
-        href: '/library',
-        icon: Library,
-        description: 'Browse algorithm sets and curate your personal set.'
-      },
-      {
-        label: 'Train',
-        href: '/train',
-        icon: Dumbbell,
-        description: 'Drill algorithms with recognition and timing.'
+        label: 'Algorithms',
+        href: '/algorithms',
+        icon: Blocks,
+        description: 'Browse, curate, and drill your algorithm sets.'
       },
       {
         label: 'Solver',

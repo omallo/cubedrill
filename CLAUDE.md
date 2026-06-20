@@ -59,12 +59,21 @@ Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
   authored algs are modelled but not wired yet.
 - **`src/lib/components/`** — `ui/` (Button, Card, Badge), `layout/` (AppShell,
   Sidebar, Header, BrandLogo, ThemeToggle), `cube/` (CubePlayer, CaseDiagram),
-  plus PageHeader/StatCard/PlaceholderView and the library pieces
+  plus PageHeader/StatCard/PlaceholderView and the set-page pieces
   `LearningStatusControl` (+ exported `STATUS_META` colour map), `CaseFilterBar`,
-  `SetProgressBar`. Barrel `index.ts` re-exports everything **except `cube/`** —
-  cube components statically pull in heavy cubing.js, so routes import them directly
-  from `$lib/components/cube` to keep cubing out of the main bundle (route-level
-  code splitting).
+  `SetProgressBar`. Barrel `index.ts` re-exports everything **except `cube/`** and
+  `train/` — those statically pull in heavy cubing.js, so routes import them directly
+  (`$lib/components/cube`, `$lib/components/train/algorithm-trainer.svelte`) to keep
+  cubing out of the main bundle (route-level code splitting).
+- **`src/lib/components/train/algorithm-trainer.svelte`** — the recognition-first
+  drilling loop. Takes a `pool: CaseInSet[]` (+ `setName`) and **snapshots it on
+  mount** (`untrack`) so cycling a status mid-session doesn't resize the deck. One
+  reused `CubePlayer` (no remount per case — props drive it). Recognition hides the
+  case name + algorithm (the cube IS the prompt); Reveal shows them + Play/Reset +
+  inline `LearningStatusControl`. Sequential/shuffle order, prev/next (wrap), 2D/3D
+  toggle (when the phase supports both), hint-facelets toggle, a per-case recognition
+  timer (feedback only — not persisted yet), and keyboard shortcuts
+  (Space=reveal/next, ←/→, p=play, r=reset, s=shuffle, v=viz, h=hint, m=mark).
 - **`src/lib/config/navigation.ts`** — single source of truth for sidebar nav.
 - **`src/lib/theme.svelte.ts`** — light/dark/system theme controller; no-FOUC
   bootstrap script in `src/app.html`.
@@ -72,13 +81,19 @@ Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
   sticker palettes via `@theme`; semantic tokens (`background`, `surface`,
   `foreground`, `border`, `primary`, …) via `@theme inline` that flip with a
   class-based `.dark` (`@custom-variant dark`).
-- **Routes**: dashboard `/`, `/library` (overview — set cards with a two-segment
-  `SetProgressBar`) + `/library/[set]` (cases grouped into sections, per-case
-  learning-status chip, and a `CaseFilterBar`). The set page keeps its **filter
-  state in the URL** (`?status=learning,mastered&group=dot`) via `goto(..., {
-replaceState, keepFocus, noScroll })`, read from `page.url.searchParams`;
-  filtering re-runs through `personal.status()` so cycling a status re-filters live.
-  Plus placeholder pages for train/solver/solves/progress/settings.
+- **Routes**: dashboard `/`, the **Algorithms** hub `/algorithms` (overview — set
+  cards with a two-segment `SetProgressBar`) + `/algorithms/[set]`. The set page is
+  a single page with **two URL-backed modes** — `?mode=list` (default) shows cases
+  grouped into sections with per-case learning-status chips; `?mode=train` renders
+  the recognition-first `AlgorithmTrainer`. A List/Train segmented toggle in the
+  header flips the mode. **Filter state lives in the URL** alongside it
+  (`?mode=train&status=learning,mastered&group=dot`) via `goto(..., { replaceState,
+keepFocus, noScroll })`, read from `page.url.searchParams`; the same `CaseFilterBar`
+  drives both modes. Filtering re-runs through `personal.status()` so cycling a
+  status re-filters live; the trainer drills exactly the filtered pool (keyed by
+  set+filters so it re-snapshots on change). View and Train are deliberately one
+  hub (nav item "Algorithms") rather than separate Library/Train pages. Plus
+  placeholder pages for solver/solves/progress/settings.
 
 ## cubing.js — hard-won gotchas (IMPORTANT)
 
@@ -175,11 +190,24 @@ Real findings from this session. **Most of it was reverted** — see status belo
   leading-`y`). Resolve this before the user-selectable cross-color feature.
 - **F2L**: 11 of 41 BR algs missing; FL/BL mirroring not yet implemented; review
   seeded algorithm choices.
-- **Library** now has: grouped case lists, per-case learning status (local-first),
-  URL-backed status+group filtering, and overview progress bars. Still to come:
+- **Algorithms hub** (formerly split Library/Train, now merged — see Routes) has:
+  grouped case lists, per-case learning status (local-first), URL-backed status+group
+  filtering, overview progress bars, and a **List/Train mode toggle** (recognition-first
+  drilling loop shares the same filtered selection).
+- **Train mode** still to refine when sessions land: **persist times/results** (the
+  recognition timer is feedback-only now), and a smart-cube path (PoC used
+  `gan-web-bluetooth`; not wired in the new app yet).
+- **Normal-cube drilling gap** (discussed, parked behind the orientation work): the
+  trainer shows the case but no **setup scramble**, so a non-smart-cube user can't get
+  their physical cube into the case to execute. Fix = display the derived setup
+  (`invert(moves)`) — but it must land the physical case in the same orientation as the
+  on-screen recognition image, which depends on resolving the parked net-rotation /
+  white-cross / F2L-mask work above. (Showing the long inverse doesn't meaningfully
+  spoil recognition; mentally inverting a 12+ move alg isn't how anyone recalls it.)
+- Still to come:
   - **Algorithm selection** — multiple algs per case + user picks one
-    (`chosenAlgorithmId` already in the model).
-  - **Train mode** — the list→train transition (status/filter plumbing is ready).
+    (`chosenAlgorithmId` already in the model; the trainer currently drills the
+    `primary`/first alg).
   - **Global ⌘K search** — the deferred text-search home (in-set text search was
     intentionally skipped as low-value; see below).
   - **F2L slot filter** in `CaseFilterBar` (stubbed; waits on the mirroring work).

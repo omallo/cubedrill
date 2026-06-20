@@ -13,8 +13,8 @@
 
 <PageHeader title="Welcome back" description="Pick up your algorithm journey where you left off.">
   {#snippet actions()}
-    <Button href="/train">
-      Start training
+    <Button href="/algorithms">
+      Browse algorithms
       <ArrowRight size={16} />
     </Button>
   {/snippet}
@@ -60,12 +60,12 @@
 <Card class="mt-8 p-6">
   <h3 class="font-semibold text-foreground">New to Cubedrill?</h3>
   <p class="mt-1 max-w-2xl text-sm text-muted-foreground">
-    Start by browsing the algorithm library and adding the cases you want to learn to your personal
+    Start by browsing the algorithm sets and adding the cases you want to learn to your personal
     set. From there you can drill them in the trainer, generate human-style solutions in the solver,
     and track your progress over time.
   </p>
   <div class="mt-4 flex flex-wrap gap-2">
-    <Button href="/library" variant="outline" size="sm">Browse library</Button>
+    <Button href="/algorithms" variant="outline" size="sm">Browse algorithms</Button>
     <Button href="/progress" variant="ghost" size="sm">View progress</Button>
   </div>
 </Card>

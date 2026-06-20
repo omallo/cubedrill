@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { ArrowLeft } from 'lucide-svelte';
+  import { ArrowLeft, List, Dumbbell } from 'lucide-svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import { PageHeader, Card, Badge, LearningStatusControl, CaseFilterBar } from '$lib/components';
+  import { PageHeader, Card, LearningStatusControl, CaseFilterBar } from '$lib/components';
   import { CaseDiagram } from '$lib/components/cube';
+  // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
+  import AlgorithmTrainer from '$lib/components/train/algorithm-trainer.svelte';
   import {
     getSet,
     caseGroupsInSet,
@@ -12,6 +14,7 @@
     type SetGroup
   } from '$lib/domain';
   import { personal } from '$lib/personal.svelte';
+  import { cn } from '$lib/utils/cn';
 
   const set = $derived(getSet(page.params.set ?? ''));
   const allGroups = $derived(set ? caseGroupsInSet(set.id) : []);
@@ -25,7 +28,10 @@
     allGroups.map((s) => s.group).filter((g): g is SetGroup => g !== undefined)
   );
 
-  // --- Filter state lives in the URL: ?status=learning,mastered&group=dot ---
+  // --- View mode + filters live in the URL ---------------------------------
+  // ?mode=train (list is the default) & ?status=learning,mastered & group=dot
+  const mode = $derived(page.url.searchParams.get('mode') === 'train' ? 'train' : 'list');
+
   const VALID_STATUS: LearningStatus[] = ['not-learned', 'learning', 'mastered'];
   const statusFilter = $derived(
     (page.url.searchParams.get('status') ?? '')
@@ -43,6 +49,10 @@
       keepFocus: true,
       noScroll: true
     });
+  }
+
+  function setMode(m: 'list' | 'train') {
+    updateParams((p) => (m === 'train' ? p.set('mode', 'train') : p.delete('mode')));
   }
 
   function toggleStatus(s: LearningStatus) {
@@ -77,18 +87,30 @@
   );
   const shownCount = $derived(filteredGroups.reduce((n, g) => n + g.cases.length, 0));
 
+  // The trainer drills exactly what the list shows, in the same order.
+  const pool = $derived(filteredGroups.flatMap((g) => g.cases));
+  // Remount the trainer when the deck's identity changes (set or filters) so it
+  // re-snapshots; status is intentionally excluded (cycling shouldn't resize it).
+  const sessionKey = $derived(`${set?.id}|${statusFilter.join(',')}|${groupFilter ?? ''}`);
+
   const primaryAlg = (algorithms: Algorithm[]): Algorithm | undefined =>
     algorithms.find((a) => a.primary) ?? algorithms[0];
+
+  const modeBtn = (active: boolean) =>
+    cn(
+      'inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium transition-colors',
+      active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+    );
 </script>
 
-<svelte:head><title>{set?.name ?? 'Library'} · Cubedrill</title></svelte:head>
+<svelte:head><title>{set?.name ?? 'Algorithms'} · Cubedrill</title></svelte:head>
 
 <a
-  href="/library"
+  href="/algorithms"
   class="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
 >
   <ArrowLeft size={15} />
-  Library
+  Algorithms
 </a>
 
 {#if !set}
@@ -102,7 +124,14 @@
         <span class="font-semibold text-amber-600 dark:text-amber-400">{learningCount}</span>
         learning
       </span>
-      <Badge variant="outline">{totalCases} cases</Badge>
+      <div class="inline-flex rounded-lg border border-border bg-surface p-0.5">
+        <button type="button" class={modeBtn(mode === 'list')} onclick={() => setMode('list')}>
+          <List size={15} /> List
+        </button>
+        <button type="button" class={modeBtn(mode === 'train')} onclick={() => setMode('train')}>
+          <Dumbbell size={15} /> Train
+        </button>
+      </div>
     {/snippet}
   </PageHeader>
 
@@ -117,7 +146,11 @@
     onclear={clearFilters}
   />
 
-  {#if filteredGroups.length === 0}
+  {#if mode === 'train'}
+    {#key sessionKey}
+      <AlgorithmTrainer {pool} setName={set.name} />
+    {/key}
+  {:else if filteredGroups.length === 0}
     <Card class="p-10 text-center text-sm text-muted-foreground">
       No cases match the current filters.
       <button

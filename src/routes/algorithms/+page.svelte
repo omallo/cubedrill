@@ -9,11 +9,11 @@
   const phases = method.phaseIds.map((id) => getPhase(id)).filter((p) => p !== undefined);
 </script>
 
-<svelte:head><title>Library · Cubedrill</title></svelte:head>
+<svelte:head><title>Algorithms · Cubedrill</title></svelte:head>
 
 <PageHeader
-  title="Library"
-  description="Browse the built-in algorithm sets and pick what to learn."
+  title="Algorithms"
+  description="Browse the built-in sets, pick what to learn, and drill them."
 />
 
 <div class="space-y-8">
@@ -37,7 +37,7 @@
             {@const ids = casesInSet(set.id).map((c) => c.case.id)}
             {@const mastered = personal.count(ids, 'mastered')}
             {@const learning = personal.count(ids, 'learning')}
-            <a href="/library/{set.id}" class="group rounded-xl">
+            <a href="/algorithms/{set.id}" class="group rounded-xl">
               <Card
                 class="flex h-full flex-col p-5 transition-colors group-hover:border-brand-300 dark:group-hover:border-brand-700"
               >

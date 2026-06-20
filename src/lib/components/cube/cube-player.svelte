@@ -1,7 +1,7 @@
 <script lang="ts">
   // Static import registers the <twisty-player> custom element and lets Svelte set
   // its properties at upgrade time (the POC's proven pattern). cubing.js is heavy,
-  // so cube components are imported directly by the library/train/solver routes —
+  // so cube components are imported directly by the algorithms/solver routes —
   // never via the shared component barrel — keeping cubing out of the main bundle.
   import 'cubing/twisty';
   import { Alg } from 'cubing/alg';

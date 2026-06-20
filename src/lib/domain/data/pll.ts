@@ -138,7 +138,7 @@ export const pllCases: Case[] = [
     algorithms: [
       {
         id: 'pll-aa/0',
-        moves: "x L2 D2 L' U' L D2 L' U L'",
+        moves: "x L2 D2 L' U' L D2 L' U L' x'",
         primary: true,
         source: 'jperm'
       },
@@ -167,7 +167,7 @@ export const pllCases: Case[] = [
     algorithms: [
       {
         id: 'pll-ab/0',
-        moves: "x' L2 D2 L U L' D2 L U' L",
+        moves: "x' L2 D2 L U L' D2 L U' L x",
         primary: true,
         source: 'jperm'
       },
@@ -196,13 +196,13 @@ export const pllCases: Case[] = [
     algorithms: [
       {
         id: 'pll-e/0',
-        moves: "x' L' U L D' L' U' L D L' U' L D' L' U L D",
+        moves: "x' L' U L D' L' U' L D L' U' L D' L' U L D x",
         primary: true,
         source: 'jperm'
       },
       {
         id: 'pll-e/1',
-        moves: "x' R U' R' D R U R' D' R U R' D R U' R' D'",
+        moves: "x' R U' R' D R U R' D' R U R' D R U' R' D' x",
         source: 'jperm'
       }
     ]
@@ -229,7 +229,7 @@ export const pllCases: Case[] = [
     algorithms: [
       {
         id: 'pll-ja/0',
-        moves: "x R2 F R F' R U2 r' U r U2",
+        moves: "x R2 F R F' R U2 r' U r U2 x'",
         primary: true,
         source: 'jperm'
       },
@@ -369,7 +369,7 @@ export const pllCases: Case[] = [
       },
       {
         id: 'pll-v/4',
-        moves: "x' R' F R F' U R U2 R' U' R U' R' U2 R U R' U'",
+        moves: "x' R' F R F' U R U2 R' U' R U' R' U2 R U R' U' x",
         source: 'jperm'
       }
     ]

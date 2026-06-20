@@ -1,0 +1,123 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+/*
+ * Cubedrill design system
+ * ---------------------------------------------------------------------------
+ * Theming model:
+ *   - Fixed palettes (`brand`, `cube`) live in `@theme` — same in every theme.
+ *   - Semantic tokens (background, surface, foreground, ...) are CSS variables
+ *     defined per-theme in `:root` / `.dark`, then exposed to Tailwind via
+ *     `@theme inline` so utilities like `bg-surface` / `text-foreground` track
+ *     the active theme automatically.
+ *   - Dark mode is class-based (`.dark` on <html>) so we can offer an explicit
+ *     light / dark / system toggle rather than relying on the OS alone.
+ */
+
+/* Enable a manual, class-driven dark mode (instead of prefers-color-scheme). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-mono:
+    'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* Brand — indigo / violet. Used for primary actions, focus, active nav. */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  /*
+	 * Cube sticker colors — reserved strictly for representing cube data
+	 * (stickers, phase accents, status). Never used as UI chrome.
+	 */
+  --color-cube-white: #f8fafc;
+  --color-cube-yellow: #facc15;
+  --color-cube-green: #22c55e;
+  --color-cube-blue: #3b82f6;
+  --color-cube-red: #ef4444;
+  --color-cube-orange: #f97316;
+}
+
+/* Semantic tokens — light theme (default). */
+:root {
+  --background: #f8fafc; /* app canvas */
+  --surface: #ffffff; /* cards, sidebar, header */
+  --surface-muted: #f1f5f9; /* subtle fills, table stripes */
+  --foreground: #0f172a; /* primary text */
+  --muted-foreground: #64748b; /* secondary text */
+  --border: #e2e8f0; /* hairlines, dividers */
+  --accent: #f1f5f9; /* hover background */
+  --accent-foreground: #0f172a;
+  --primary: #4f46e5; /* brand-600 */
+  --primary-foreground: #ffffff;
+  --ring: #6366f1; /* focus ring — brand-500 */
+
+  color-scheme: light;
+}
+
+/* Semantic tokens — dark theme. */
+.dark {
+  --background: #020617; /* slate-950 */
+  --surface: #0f172a; /* slate-900 */
+  --surface-muted: #1e293b; /* slate-800 */
+  --foreground: #f1f5f9; /* slate-100 */
+  --muted-foreground: #94a3b8; /* slate-400 */
+  --border: #1e293b; /* slate-800 */
+  --accent: #1e293b;
+  --accent-foreground: #f1f5f9;
+  --primary: #6366f1; /* brand-500 — a touch brighter on dark */
+  --primary-foreground: #ffffff;
+  --ring: #818cf8; /* brand-400 */
+
+  color-scheme: dark;
+}
+
+/* Expose semantic tokens as Tailwind color utilities (theme-reactive). */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  /* Consistent, branded focus ring across interactive elements. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}

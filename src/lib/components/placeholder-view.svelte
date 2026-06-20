@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { ComponentType } from 'svelte';
   import { Card, Badge } from '$lib/components/ui';
+  import type { IconComponent } from '$lib/types';
 
   type Props = {
     title: string;
     description?: string;
-    icon?: ComponentType;
+    icon?: IconComponent;
   };
 
   let { title, description = undefined, icon = undefined }: Props = $props();

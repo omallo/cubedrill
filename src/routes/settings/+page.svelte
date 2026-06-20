@@ -2,8 +2,9 @@
   import { Sun, Moon, Monitor } from 'lucide-svelte';
   import { PageHeader, Card } from '$lib/components';
   import { theme, type ThemePreference } from '$lib/theme.svelte';
+  import type { IconComponent } from '$lib/types';
 
-  const options: { value: ThemePreference; label: string; icon: typeof Sun }[] = [
+  const options: { value: ThemePreference; label: string; icon: IconComponent }[] = [
     { value: 'light', label: 'Light', icon: Sun },
     { value: 'dark', label: 'Dark', icon: Moon },
     { value: 'system', label: 'System', icon: Monitor }

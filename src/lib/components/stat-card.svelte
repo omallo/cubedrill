@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { ComponentType } from 'svelte';
   import { Card } from '$lib/components/ui';
+  import type { IconComponent } from '$lib/types';
 
   type Props = {
     label: string;
     value: string | number;
-    icon?: ComponentType;
+    icon?: IconComponent;
     /** Small supporting text below the value. */
     hint?: string;
   };

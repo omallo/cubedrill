@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Wand2 } from 'lucide-svelte';
+  import { WandSparkles } from 'lucide-svelte';
   import { PageHeader, PlaceholderView } from '$lib/components';
 </script>
 
@@ -7,7 +7,7 @@
 
 <PageHeader title="Solver" description="Generate human-style solutions from your personal set." />
 <PlaceholderView
-  icon={Wand2}
+  icon={WandSparkles}
   title="The solver is coming soon"
   description="Choose a scramble type and a solve target, then step through a solution built from the algorithms you're actually learning, with a per-phase breakdown."
 />

@@ -1,18 +1,18 @@
-import type { ComponentType } from 'svelte';
 import {
   LayoutDashboard,
   Library,
   Dumbbell,
-  Wand2,
+  WandSparkles,
   Timer,
-  BarChart3,
+  ChartColumn,
   Settings
 } from 'lucide-svelte';
+import type { IconComponent } from '$lib/types';
 
 export interface NavItem {
   label: string;
   href: string;
-  icon: ComponentType;
+  icon: IconComponent;
   /** Short description used for tooltips / placeholder views. */
   description?: string;
 }
@@ -57,7 +57,7 @@ export const primaryNav: NavSection[] = [
       {
         label: 'Solver',
         href: '/solver',
-        icon: Wand2,
+        icon: WandSparkles,
         description: 'Generate human-style solutions from your personal set.'
       },
       {
@@ -74,7 +74,7 @@ export const primaryNav: NavSection[] = [
       {
         label: 'Progress',
         href: '/progress',
-        icon: BarChart3,
+        icon: ChartColumn,
         description: 'Goals, sessions, stats, and feedback over time.'
       }
     ]

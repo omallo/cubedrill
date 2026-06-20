@@ -1,7 +1,8 @@
 <script lang="ts">
   import { ArrowRight } from 'lucide-svelte';
-  import { PageHeader, Card, Badge } from '$lib/components';
+  import { PageHeader, Card, Badge, SetProgressBar } from '$lib/components';
   import { catalog, getPhase, setsForPhase, casesInSet } from '$lib/domain';
+  import { personal } from '$lib/personal.svelte';
 
   // CFOP phases in solve order, each with its sets.
   const method = catalog.methods[0];
@@ -33,10 +34,12 @@
       {:else}
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {#each sets as set (set.id)}
-            {@const count = casesInSet(set.id).length}
+            {@const ids = casesInSet(set.id).map((c) => c.case.id)}
+            {@const mastered = personal.count(ids, 'mastered')}
+            {@const learning = personal.count(ids, 'learning')}
             <a href="/library/{set.id}" class="group rounded-xl">
               <Card
-                class="h-full p-5 transition-colors group-hover:border-brand-300 dark:group-hover:border-brand-700"
+                class="flex h-full flex-col p-5 transition-colors group-hover:border-brand-300 dark:group-hover:border-brand-700"
               >
                 <div class="flex items-center justify-between gap-2">
                   <p class="font-semibold text-foreground">{set.name}</p>
@@ -47,14 +50,20 @@
                 {#if set.description}
                   <p class="mt-1 text-sm text-muted-foreground">{set.description}</p>
                 {/if}
-                <div
-                  class="mt-4 flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400"
-                >
-                  {count} cases
-                  <ArrowRight
-                    size={15}
-                    class="opacity-0 transition-opacity group-hover:opacity-100"
-                  />
+                <div class="mt-auto space-y-1.5 pt-4">
+                  <SetProgressBar {mastered} {learning} total={ids.length} />
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-muted-foreground">
+                      <span class="font-semibold text-emerald-600 dark:text-emerald-400">
+                        {mastered}
+                      </span>
+                      / {ids.length} mastered
+                    </span>
+                    <ArrowRight
+                      size={15}
+                      class="text-brand-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-brand-400"
+                    />
+                  </div>
                 </div>
               </Card>
             </a>

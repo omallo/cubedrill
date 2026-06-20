@@ -45,17 +45,26 @@ app is more branded/structured and the domain model is richer.
 - **`src/lib/domain/`** — the domain model (normalized catalog). `types.ts`,
   `catalog.ts` (CFOP method + phases), `data/{pll,oll,f2l}.ts` (seeded sets),
   `index.ts` (assembled `catalog` + lookup helpers: `getPhase/getSet/getCase`,
-  `setsForPhase`, `casesInSet`). Model = `Method → Phase → Set/Group → Case →
+  `setsForPhase`, `casesInSet`, `caseGroupsInSet` [partitions a set's cases into
+  contiguous group sections]). Model = `Method → Phase → Set/Group → Case →
 Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
-  set-relative label + group + order). Personal layer (status/chosen algs) is
-  separate and local-first. The seed data files were generated from jperm/PoC and
-  are meant to be hand-curated.
+  set-relative label + group + order). The seed data files were generated from
+  jperm/PoC and are meant to be hand-curated.
+- **`src/lib/personal.svelte.ts`** — the personal layer (local-first), separate
+  from the catalog. A `PersonalStore` runes class (mirrors `theme.svelte.ts`):
+  reactive `entries` keyed by `caseId`, mirrored to `localStorage`
+  (`cubedrill-personal`) on change. API: `status/setStatus/cycle/count`. Status is
+  per-case (shared across sets — e.g. OLL 27 in Full + 2-Look); absence ⇒
+  `not-learned` (entry dropped to keep storage lean). `chosenAlgorithmId` and
+  authored algs are modelled but not wired yet.
 - **`src/lib/components/`** — `ui/` (Button, Card, Badge), `layout/` (AppShell,
   Sidebar, Header, BrandLogo, ThemeToggle), `cube/` (CubePlayer, CaseDiagram),
-  plus PageHeader/StatCard/PlaceholderView. Barrel `index.ts` re-exports
-  everything **except `cube/`** — cube components statically pull in heavy
-  cubing.js, so routes import them directly from `$lib/components/cube` to keep
-  cubing out of the main bundle (route-level code splitting).
+  plus PageHeader/StatCard/PlaceholderView and the library pieces
+  `LearningStatusControl` (+ exported `STATUS_META` colour map), `CaseFilterBar`,
+  `SetProgressBar`. Barrel `index.ts` re-exports everything **except `cube/`** —
+  cube components statically pull in heavy cubing.js, so routes import them directly
+  from `$lib/components/cube` to keep cubing out of the main bundle (route-level
+  code splitting).
 - **`src/lib/config/navigation.ts`** — single source of truth for sidebar nav.
 - **`src/lib/theme.svelte.ts`** — light/dark/system theme controller; no-FOUC
   bootstrap script in `src/app.html`.
@@ -63,8 +72,13 @@ Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
   sticker palettes via `@theme`; semantic tokens (`background`, `surface`,
   `foreground`, `border`, `primary`, …) via `@theme inline` that flip with a
   class-based `.dark` (`@custom-variant dark`).
-- **Routes**: dashboard `/`, `/library` (overview) + `/library/[set]` (cases),
-  and placeholder pages for train/solver/solves/progress/settings.
+- **Routes**: dashboard `/`, `/library` (overview — set cards with a two-segment
+  `SetProgressBar`) + `/library/[set]` (cases grouped into sections, per-case
+  learning-status chip, and a `CaseFilterBar`). The set page keeps its **filter
+  state in the URL** (`?status=learning,mastered&group=dot`) via `goto(..., {
+replaceState, keepFocus, noScroll })`, read from `page.url.searchParams`;
+  filtering re-runs through `personal.status()` so cycling a status re-filters live.
+  Plus placeholder pages for train/solver/solves/progress/settings.
 
 ## cubing.js — hard-won gotchas (IMPORTANT)
 
@@ -95,8 +109,56 @@ block` bug. Other useful attrs: `background="none"`, `visualization`
 - **Old headless Chrome renders NO cubing** (no WebGL). Use `--headless=new`.
 - `--virtual-time-budget` does not drive cubing's render loop reliably. Capture
   via the **DevTools Protocol** (`--remote-debugging-port`, `Page.navigate`, a
-  **real** `setTimeout` wait ~10s, then `Page.captureScreenshot`). The user must
-  also confirm in a real browser for final sign-off.
+  **real** `setTimeout` wait, then `Page.captureScreenshot`). The user must also
+  confirm in a real browser for final sign-off.
+- **2D vs 3D in headless**: the 2D-LL view (SVG) renders with just `--headless=new`.
+  The **3D `PG3D` view needs software WebGL** or it shows only a loading spinner —
+  launch with `--enable-unsafe-swiftshader --use-gl=angle --use-angle=swiftshader
+--ignore-gpu-blocklist`. 3D also needs a longer wait (~15-20s) than 2D (~6s).
+- Working recipe: launch Chrome `--headless=new --remote-debugging-port=9322 …`,
+  then a tiny Node script using the `ws` package (installed in `/tmp`) drives CDP:
+  fetch `http://localhost:9322/json`, open the page target's WebSocket, `Page.enable`,
+  `Page.navigate`, wait, `Page.captureScreenshot`. `Runtime.evaluate` can seed
+  `localStorage` / click chips to exercise stateful UI before the shot.
+
+## Cube orientation & auto-scrambles (PARKED — under investigation)
+
+Real findings from this session. **Most of it was reverted** — see status below.
+
+- **Auto-scramble**: a case is derived by `setupAlg = invert(moves)`, `alg = moves`
+  (cube starts at the case; `play()` solves). cubing.js default orientation is
+  **white U, green F**.
+- **White cross = white on the bottom**: prepend `z2` to the setup
+  (`setupAlg = "z2 " + invert(moves)`), exactly as the PoC does
+  (`crossColorMovesMapping.white = 'z2'`). `z2` → white bottom, yellow top, green
+  front (red↔orange swap L/R — that's the genuine orientation of a standard cube
+  held white-down, **not** a bug). `alg` stays unrotated; the `z2` stays baked so
+  `play()` still solves. The PoC's `cube-player.svelte` is the reference.
+- **Net-rotation leak (the core problem)**: pure `invert(moves)` preserves any net
+  whole-cube rotation in the alg, so the displayed case ends up in the alg's _ending_
+  orientation instead of canonical. **Leading** rotations were patched by appending
+  the inverse in the data — committed: Aa/Ab/E/Ja PLLs now end with `x'`/`x`. A
+  **mid-alg** rotation also leaks: V-perm's primary has a `y`; confirmed it renders
+  the case rotated 90°, and appending `y'` makes it match a rotationless V-perm.
+- **Detecting it**: run each primary alg through cubing.js (`cube3x3x3` kpuzzle,
+  apply alg, check the `CENTERS` orbit moved). Across all PLL/OLL/F2L primaries only
+  `pll-v/0` still has a net rotation.
+- **F2L leading-`y` is worse than LL**: a leading `y` selects _which slot_ the alg
+  targets, so the inverted scramble puts the pair in a back slot and the front-right
+  F2L mask doesn't line up. This is what the user noticed.
+- **F2L mask**: the built-in `experimentalStickering="F2L"` preset doesn't mask the
+  way we want. The PoC drives orbits directly via `experimentalStickeringMaskOrbits`:
+  F2L = `EDGES:----IIII----,CORNERS:----IIII,CENTERS:-----I`; single slot =
+  `EDGES:----IIIII-II,CORNERS:III-IIII,CENTERS:-----I`. (`CubePlayer` had a
+  `maskOrbits` prop for this — also reverted.)
+- **CURRENT STATUS (committed code)**: everything above is **reverted** except the
+  leading-`x` PLL inverse-appends. `cube-player` `orientation` defaults to
+  `undefined` (no `z2`), no `maskOrbits`; `case-diagram` uses presets (f2l→`'F2L'`,
+  oll→`'OLL'`, pll→`'full'`); V-perm has **no** trailing `y'`. The user is digging
+  into the orientation/inversion approach and will choose between **(a)** curating
+  algs to be rotation-neutral in the data vs **(b)** normalizing net rotations when
+  deriving the scramble in `cube-player`. The future cross-color feature depends on
+  this. Don't re-apply z2/maskOrbits unprompted.
 
 ## Data sources
 
@@ -108,10 +170,20 @@ block` bug. Other useful attrs: `background="none"`, `visualization`
 
 ## Known follow-ups
 
-- PLLs that begin with a whole-cube rotation (e.g. `Aa`/`Ab` start with `x`)
-  render tilted in the 2D recognition view — normalize/strip rotations for the
-  recognition diagram.
-- F2L: 11 of 41 BR algs missing; FL/BL mirroring not yet implemented; review
+- **Cube orientation / auto-scramble** — parked with the user; see the dedicated
+  section above (net-rotation leak, white-cross `z2`, F2L mask orbits, F2L
+  leading-`y`). Resolve this before the user-selectable cross-color feature.
+- **F2L**: 11 of 41 BR algs missing; FL/BL mirroring not yet implemented; review
   seeded algorithm choices.
-- Library is at the "render cases" stage — filtering, groups, status, personal-set
-  editing, and the list→train transition are still to come.
+- **Library** now has: grouped case lists, per-case learning status (local-first),
+  URL-backed status+group filtering, and overview progress bars. Still to come:
+  - **Algorithm selection** — multiple algs per case + user picks one
+    (`chosenAlgorithmId` already in the model).
+  - **Train mode** — the list→train transition (status/filter plumbing is ready).
+  - **Global ⌘K search** — the deferred text-search home (in-set text search was
+    intentionally skipped as low-value; see below).
+  - **F2L slot filter** in `CaseFilterBar` (stubbed; waits on the mirroring work).
+- **Filter design decisions** (agreed with user): group filter stays **single-select**
+  (multi is niche; URL already uses comma-lists so `group=a,b` is a cheap upgrade
+  later). In-set **text search dropped** — its real home is global ⌘K search.
+  Collapsible groups **not needed** — filtering by group covers "focus one group".

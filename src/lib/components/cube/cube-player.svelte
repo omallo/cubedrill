@@ -4,8 +4,8 @@
   // so cube components are imported directly by the algorithms/solver routes —
   // never via the shared component barrel — keeping cubing out of the main bundle.
   import 'cubing/twisty';
-  import { Alg } from 'cubing/alg';
   import { cn } from '$lib/utils/cn';
+  import { deriveSetup } from './orientation';
 
   type Props = {
     /** The solution move sequence. The setup (scramble) is derived by inverting it. */
@@ -37,8 +37,21 @@
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let player = $state<any>();
 
-  const setup = $derived(new Alg(moves).invert().toString());
-  const setupAlg = $derived(orientation ? `${orientation} ${setup}` : setup);
+  // Deriving the setup needs the cubing kpuzzle (async), so resolve it into state.
+  // We hold off rendering until it's ready (rather than show a wrong orientation and
+  // flip) — the lookup is cached, so this is instant after the first cube on a page.
+  let setupAlg = $state<string | null>(null);
+  $effect(() => {
+    const m = moves;
+    const o = orientation;
+    let cancelled = false;
+    deriveSetup(m, o).then((s) => {
+      if (!cancelled) setupAlg = s;
+    });
+    return () => {
+      cancelled = true;
+    };
+  });
 
   /** Play the algorithm from the start. */
   export function play() {
@@ -53,16 +66,18 @@
   }
 </script>
 
-<twisty-player
-  bind:this={player}
-  class={cn('h-full w-full', className)}
-  puzzle="3x3x3"
-  visualization={vizFormat[visualization]}
-  background="none"
-  controlPanel="none"
-  hintFacelets={hintFacelets ? 'auto' : 'none'}
-  experimentalStickering={stickering}
-  experimentalSetupAlg={setupAlg}
-  alg={moves}
-  {tempoScale}
-></twisty-player>
+{#if setupAlg !== null}
+  <twisty-player
+    bind:this={player}
+    class={cn('h-full w-full', className)}
+    puzzle="3x3x3"
+    visualization={vizFormat[visualization]}
+    background="none"
+    controlPanel="none"
+    hintFacelets={hintFacelets ? 'auto' : 'none'}
+    experimentalStickering={stickering}
+    experimentalSetupAlg={setupAlg}
+    alg={moves}
+    {tempoScale}
+  ></twisty-player>
+{/if}

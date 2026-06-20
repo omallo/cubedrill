@@ -99,7 +99,9 @@
   const modeBtn = (active: boolean) =>
     cn(
       'inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium transition-colors',
-      active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+      active
+        ? 'bg-primary text-primary-foreground'
+        : 'cursor-pointer text-muted-foreground hover:text-foreground'
     );
 </script>
 
@@ -148,7 +150,7 @@
 
   {#if mode === 'train'}
     {#key sessionKey}
-      <AlgorithmTrainer {pool} setName={set.name} />
+      <AlgorithmTrainer {pool} />
     {/key}
   {:else if filteredGroups.length === 0}
     <Card class="p-10 text-center text-sm text-muted-foreground">

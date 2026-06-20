@@ -13,6 +13,7 @@
   import { Button, Card, LearningStatusControl } from '$lib/components';
   // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
   import CubePlayer from '$lib/components/cube/cube-player.svelte';
+  import { setupScramble } from '$lib/components/cube/orientation';
   import { getPhase, type Algorithm, type CaseInSet, type StickeringMask } from '$lib/domain';
   import { personal } from '$lib/personal.svelte';
   import { cn } from '$lib/utils/cn';
@@ -20,11 +21,9 @@
   type Props = {
     /** The training pool, in the order it should be drilled. */
     pool: CaseInSet[];
-    /** Set name, shown for context. */
-    setName: string;
   };
 
-  let { pool, setName }: Props = $props();
+  let { pool }: Props = $props();
 
   // Snapshot the pool once: cycling a case's status during a session must not
   // resize/reorder the deck under the user (the page re-derives `pool` live).
@@ -54,6 +53,19 @@
   const alg = $derived<Algorithm | undefined>(
     current?.case.algorithms.find((a) => a.primary) ?? current?.case.algorithms[0]
   );
+
+  // Scramble to apply to a solved cube to reach the case — for practising on a
+  // normal (non-smart) cube, where you otherwise can't get into the case to solve it.
+  let scramble = $state('');
+  $effect(() => {
+    const m = alg?.moves;
+    let cancelled = false;
+    if (m) setupScramble(m).then((s) => !cancelled && (scramble = s));
+    else scramble = '';
+    return () => {
+      cancelled = true;
+    };
+  });
 
   // --- Recognition / reveal -------------------------------------------------
   let revealed = $state(false);
@@ -163,13 +175,14 @@
 
 {#if cases.length === 0}
   <Card class="p-10 text-center text-sm text-muted-foreground">
-    No cases match the selected filters. Adjust the filters in the library, then start training.
+    No cases match the selected filters. Adjust the filters above, then start training.
   </Card>
 {:else if current}
   <div class="mx-auto flex max-w-sm flex-col items-center">
-    <div class="mb-4 flex w-full items-center justify-between text-sm text-muted-foreground">
-      <span class="truncate">{setName}</span>
-      <span class="shrink-0 tabular-nums">{pos + 1} / {cases.length}</span>
+    <div class="mb-4 flex min-h-5 w-full items-center justify-center text-center text-sm">
+      {#if scramble}
+        <span class="font-mono break-words text-foreground">{scramble}</span>
+      {/if}
     </div>
 
     <div class="relative aspect-square w-full">

@@ -58,7 +58,8 @@ Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
   `not-learned` (entry dropped to keep storage lean). `chosenAlgorithmId` and
   authored algs are modelled but not wired yet.
 - **`src/lib/components/`** — `ui/` (Button, Card, Badge), `layout/` (AppShell,
-  Sidebar, Header, BrandLogo, ThemeToggle), `cube/` (CubePlayer, CaseDiagram),
+  Sidebar, Header, BrandLogo, ThemeToggle), `cube/` (CubePlayer, CaseDiagram, plus
+  `orientation.ts` — net-rotation normalization + setup-scramble derivation),
   plus PageHeader/StatCard/PlaceholderView and the set-page pieces
   `LearningStatusControl` (+ exported `STATUS_META` colour map), `CaseFilterBar`,
   `SetProgressBar`. Barrel `index.ts` re-exports everything **except `cube/`** and
@@ -136,44 +137,46 @@ block` bug. Other useful attrs: `background="none"`, `visualization`
   `Page.navigate`, wait, `Page.captureScreenshot`. `Runtime.evaluate` can seed
   `localStorage` / click chips to exercise stateful UI before the shot.
 
-## Cube orientation & auto-scrambles (PARKED — under investigation)
+## Cube orientation & auto-scrambles (RESOLVED — normalized centrally)
 
-Real findings from this session. **Most of it was reverted** — see status below.
+A case is derived by `setupAlg = invert(moves)`, `alg = moves` (cube starts at the
+case; `play()` solves). cubing.js default orientation is **white U, green F**.
 
-- **Auto-scramble**: a case is derived by `setupAlg = invert(moves)`, `alg = moves`
-  (cube starts at the case; `play()` solves). cubing.js default orientation is
-  **white U, green F**.
-- **White cross = white on the bottom**: prepend `z2` to the setup
-  (`setupAlg = "z2 " + invert(moves)`), exactly as the PoC does
-  (`crossColorMovesMapping.white = 'z2'`). `z2` → white bottom, yellow top, green
-  front (red↔orange swap L/R — that's the genuine orientation of a standard cube
-  held white-down, **not** a bug). `alg` stays unrotated; the `z2` stays baked so
-  `play()` still solves. The PoC's `cube-player.svelte` is the reference.
-- **Net-rotation leak (the core problem)**: pure `invert(moves)` preserves any net
-  whole-cube rotation in the alg, so the displayed case ends up in the alg's _ending_
-  orientation instead of canonical. **Leading** rotations were patched by appending
-  the inverse in the data — committed: Aa/Ab/E/Ja PLLs now end with `x'`/`x`. A
-  **mid-alg** rotation also leaks: V-perm's primary has a `y`; confirmed it renders
-  the case rotated 90°, and appending `y'` makes it match a rotationless V-perm.
-- **Detecting it**: run each primary alg through cubing.js (`cube3x3x3` kpuzzle,
-  apply alg, check the `CENTERS` orbit moved). Across all PLL/OLL/F2L primaries only
-  `pll-v/0` still has a net rotation.
-- **F2L leading-`y` is worse than LL**: a leading `y` selects _which slot_ the alg
-  targets, so the inverted scramble puts the pair in a back slot and the front-right
-  F2L mask doesn't line up. This is what the user noticed.
-- **F2L mask**: the built-in `experimentalStickering="F2L"` preset doesn't mask the
-  way we want. The PoC drives orbits directly via `experimentalStickeringMaskOrbits`:
+- **The net-rotation leak (the core problem, now fixed)**: pure `invert(moves)`
+  preserves any net whole-cube rotation the alg carries, so the displayed case ended
+  up in the alg's _ending_ orientation instead of canonical. Sources: a **leading
+  `y`** in F2L algs (slot-selector — also put the pair in the wrong slot so the FR
+  mask didn't line up), and **mid-alg** rotations like V-perm's `y`.
+- **Chosen fix = (b) normalize centrally**, NOT (a) curate the data. The leading `y`
+  is part of the real, executable alg, so editing it out would misrepresent it.
+  `src/lib/components/cube/orientation.ts` computes an alg's **net rotation** via the
+  cubing kpuzzle (apply alg, read the `CENTERS` orbit; a 24-orientation lookup maps
+  it to a rotation alg) and `deriveSetup()` prepends it to `invert(moves)` so the
+  case is always canonical. `cube-player` resolves the setup through this (async →
+  gated render, no orientation flip). Data stays the real alg. Empirically this
+  fixed all 19 leaking primaries (V-perm + 18 F2L), 0 remaining.
+  - Any old data-level inverse-appends (e.g. trailing `x'/x` once added to some PLLs)
+    are now **redundant** — normalization handles rotation regardless — so new algs
+    can be entered in their natural form.
+- **Setup scramble (normal-cube training)**: `setupScramble()` in the same module
+  returns a clean, **rotation-free** scramble to apply to a solved cube to reach the
+  case — it conjugates the net rotation through the sequence so it cancels (pure
+  face/slice turns), then `simplify`s; falls back to a verified rotation-bearing form
+  if elimination can't fully cancel. The trainer shows this under the cube.
+- **Verified all 119 primaries** produce a rotation-free, equivalent scramble.
+
+### Still deferred (don't apply unprompted)
+
+- **White cross = white on the bottom**: prepend `z2` to the setup (the PoC's
+  `crossColorMovesMapping.white = 'z2'`). `cube-player`'s `orientation` prop exists
+  for exactly this (applied outermost in `deriveSetup`) but defaults to `undefined`.
+  This is the basis for the future **user-selectable cross-color** feature.
+- **F2L mask**: `case-diagram`/`cube-player` use the built-in `experimentalStickering`
+  presets (f2l→`F2L`, oll→`OLL`, pll→`full`). The `F2L` preset is acceptable now
+  (the orientation fix put the pair in the right slot). If it proves insufficient,
+  the PoC drove orbits directly via `experimentalStickeringMaskOrbits`:
   F2L = `EDGES:----IIII----,CORNERS:----IIII,CENTERS:-----I`; single slot =
-  `EDGES:----IIIII-II,CORNERS:III-IIII,CENTERS:-----I`. (`CubePlayer` had a
-  `maskOrbits` prop for this — also reverted.)
-- **CURRENT STATUS (committed code)**: everything above is **reverted** except the
-  leading-`x` PLL inverse-appends. `cube-player` `orientation` defaults to
-  `undefined` (no `z2`), no `maskOrbits`; `case-diagram` uses presets (f2l→`'F2L'`,
-  oll→`'OLL'`, pll→`'full'`); V-perm has **no** trailing `y'`. The user is digging
-  into the orientation/inversion approach and will choose between **(a)** curating
-  algs to be rotation-neutral in the data vs **(b)** normalizing net rotations when
-  deriving the scramble in `cube-player`. The future cross-color feature depends on
-  this. Don't re-apply z2/maskOrbits unprompted.
+  `EDGES:----IIIII-II,CORNERS:III-IIII,CENTERS:-----I`.
 
 ## Data sources
 
@@ -185,9 +188,10 @@ Real findings from this session. **Most of it was reverted** — see status belo
 
 ## Known follow-ups
 
-- **Cube orientation / auto-scramble** — parked with the user; see the dedicated
-  section above (net-rotation leak, white-cross `z2`, F2L mask orbits, F2L
-  leading-`y`). Resolve this before the user-selectable cross-color feature.
+- **Cube orientation / auto-scramble** — **resolved** via central net-rotation
+  normalization + setup-scramble derivation (see the dedicated section above). Still
+  deferred there: white-cross `z2` (the basis for **user-selectable cross-color**)
+  and custom F2L mask orbits (only if the preset proves insufficient).
 - **F2L**: 11 of 41 BR algs missing; FL/BL mirroring not yet implemented; review
   seeded algorithm choices.
 - **Algorithms hub** (formerly split Library/Train, now merged — see Routes) has:
@@ -197,13 +201,11 @@ Real findings from this session. **Most of it was reverted** — see status belo
 - **Train mode** still to refine when sessions land: **persist times/results** (the
   recognition timer is feedback-only now), and a smart-cube path (PoC used
   `gan-web-bluetooth`; not wired in the new app yet).
-- **Normal-cube drilling gap** (discussed, parked behind the orientation work): the
-  trainer shows the case but no **setup scramble**, so a non-smart-cube user can't get
-  their physical cube into the case to execute. Fix = display the derived setup
-  (`invert(moves)`) — but it must land the physical case in the same orientation as the
-  on-screen recognition image, which depends on resolving the parked net-rotation /
-  white-cross / F2L-mask work above. (Showing the long inverse doesn't meaningfully
-  spoil recognition; mentally inverting a 12+ move alg isn't how anyone recalls it.)
+- **Normal-cube drilling** — **done**: the trainer now shows a clean setup scramble
+  under the cube (`setupScramble`), so a non-smart-cube user can build the case on a
+  solved cube and execute. (Open question if it ever matters: it's shown during
+  recognition too — fine for the normal-cube path; revisit only if pure-recognition
+  drilling wants it hidden behind a toggle.)
 - Still to come:
   - **Algorithm selection** — multiple algs per case + user picks one
     (`chosenAlgorithmId` already in the model; the trainer currently drills the

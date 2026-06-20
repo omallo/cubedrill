@@ -16,6 +16,8 @@
     stickering?: string;
     visualization?: '2D' | '3D';
     hintFacelets?: boolean;
+    /** Allow click-drag to rotate the cube. Off by default — we just display cases. */
+    draggable?: boolean;
     tempoScale?: number;
     class?: string;
   };
@@ -26,6 +28,7 @@
     stickering = 'full',
     visualization = '3D',
     hintFacelets = false,
+    draggable = false,
     tempoScale = 2,
     class: className = undefined
   }: Props = $props();
@@ -75,6 +78,7 @@
     background="none"
     controlPanel="none"
     hintFacelets={hintFacelets ? 'auto' : 'none'}
+    experimentalDragInput={draggable ? 'auto' : 'none'}
     experimentalStickering={stickering}
     experimentalSetupAlg={setupAlg}
     alg={moves}

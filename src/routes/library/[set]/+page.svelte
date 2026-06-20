@@ -1,13 +1,17 @@
 <script lang="ts">
   import { ArrowLeft } from 'lucide-svelte';
   import { page } from '$app/state';
-  import { PageHeader, Card, Badge } from '$lib/components';
+  import { PageHeader, Card, Badge, LearningStatusControl } from '$lib/components';
   import { CaseDiagram } from '$lib/components/cube';
   import { getSet, caseGroupsInSet, type Algorithm } from '$lib/domain';
+  import { personal } from '$lib/personal.svelte';
 
   const set = $derived(getSet(page.params.set ?? ''));
   const groups = $derived(set ? caseGroupsInSet(set.id) : []);
-  const totalCases = $derived(groups.reduce((n, g) => n + g.cases.length, 0));
+  const caseIds = $derived(groups.flatMap((g) => g.cases.map((c) => c.case.id)));
+  const totalCases = $derived(caseIds.length);
+  const masteredCount = $derived(personal.count(caseIds, 'mastered'));
+  const learningCount = $derived(personal.count(caseIds, 'learning'));
 
   const primaryAlg = (algorithms: Algorithm[]): Algorithm | undefined =>
     algorithms.find((a) => a.primary) ?? algorithms[0];
@@ -28,6 +32,12 @@
 {:else}
   <PageHeader title={set.name} description={set.description}>
     {#snippet actions()}
+      <span class="text-sm text-muted-foreground">
+        <span class="font-semibold text-emerald-600 dark:text-emerald-400">{masteredCount}</span>
+        mastered ·
+        <span class="font-semibold text-amber-600 dark:text-amber-400">{learningCount}</span>
+        learning
+      </span>
       <Badge variant="outline">{totalCases} cases</Badge>
     {/snippet}
   </PageHeader>
@@ -67,6 +77,11 @@
                   {alg?.moves}
                 </div>
               </div>
+              <LearningStatusControl
+                status={personal.status(entry.case.id)}
+                oncycle={() => personal.cycle(entry.case.id)}
+                class="shrink-0"
+              />
             </div>
           {/each}
         </Card>

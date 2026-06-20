@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Play } from 'lucide-svelte';
   import { getPhase, type StickeringMask } from '$lib/domain';
   import { cn } from '$lib/utils/cn';
   import CubePlayer from './cube-player.svelte';
@@ -42,6 +41,16 @@
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cube = $state<any>(null);
 
+  /** Solve the case (no-op until the player has mounted). */
+  export function play() {
+    cube?.play();
+  }
+
+  /** Reset the cube back to the case start. */
+  export function reset() {
+    cube?.reset();
+  }
+
   // Only mount the (heavy, WebGL-for-3D) player once it scrolls near the viewport.
   onMount(() => {
     const io = new IntersectionObserver(
@@ -58,16 +67,8 @@
   });
 </script>
 
-<div bind:this={host} class={cn('group relative aspect-square', className)}>
+<div bind:this={host} class={cn('relative aspect-square', className)}>
   {#if visible}
     <CubePlayer {moves} {stickering} visualization={viz} {hintFacelets} bind:this={cube} />
-    <button
-      type="button"
-      onclick={() => cube?.play()}
-      aria-label="Play algorithm"
-      class="absolute right-1 bottom-1 flex h-7 w-7 items-center justify-center rounded-full bg-surface/80 text-foreground opacity-0 shadow-sm ring-1 ring-border backdrop-blur transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-    >
-      <Play size={14} class="translate-x-px" />
-    </button>
   {/if}
 </div>

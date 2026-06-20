@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowLeft, List, Dumbbell } from 'lucide-svelte';
+  import { ArrowLeft, List, Dumbbell, Play, RotateCcw } from 'lucide-svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
   import { PageHeader, Card, LearningStatusControl, CaseFilterBar } from '$lib/components';
@@ -96,6 +96,9 @@
   const primaryAlg = (algorithms: Algorithm[]): Algorithm | undefined =>
     algorithms.find((a) => a.primary) ?? algorithms[0];
 
+  // Per-row CaseDiagram refs so the row's Play/Reset controls can drive the cube.
+  const diagrams: Record<string, CaseDiagram> = {};
+
   const modeBtn = (active: boolean) =>
     cn(
       'inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium transition-colors',
@@ -187,6 +190,7 @@
                   moves={alg?.moves ?? ''}
                   phaseId={entry.case.phaseId}
                   class="w-24 shrink-0"
+                  bind:this={diagrams[entry.case.id]}
                 />
                 <div class="min-w-0 flex-1">
                   <div class="flex items-baseline gap-2">
@@ -198,6 +202,26 @@
                   <div class="mt-1 font-mono text-sm break-words text-muted-foreground">
                     {alg?.moves}
                   </div>
+                </div>
+                <div class="flex shrink-0 items-center gap-1 text-muted-foreground">
+                  <button
+                    type="button"
+                    onclick={() => diagrams[entry.case.id]?.play()}
+                    aria-label="Play algorithm"
+                    title="Play"
+                    class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    <Play size={16} class="translate-x-px" />
+                  </button>
+                  <button
+                    type="button"
+                    onclick={() => diagrams[entry.case.id]?.reset()}
+                    aria-label="Reset cube"
+                    title="Reset"
+                    class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    <RotateCcw size={16} />
+                  </button>
                 </div>
                 <LearningStatusControl
                   status={personal.status(entry.case.id)}

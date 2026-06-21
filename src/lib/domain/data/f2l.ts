@@ -1,7 +1,6 @@
-// Standard F2L (41 cases) seeded from the Cubedrill PoC. FR is complete and
-// primary; BR is authored where the PoC had it (30/41) — FL is derived from FR and
-// BL from BR at render time (not stored). Groups follow the PoC's piece-configuration
-// sections. Algorithms are placeholders to curate; ids follow speedcubedb numbering.
+// Standard F2L (41 cases). FR is complete and primary; BR is authored where
+// available (30/41) — FL is derived from FR and BL from BR at render time (not
+// stored). Ids follow speedcubedb numbering.
 import type { AlgorithmSet, Case, SetMembership } from '../types';
 
 export const f2lStandardSet: AlgorithmSet = {

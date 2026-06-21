@@ -134,8 +134,6 @@ export interface Algorithm {
   derived?: boolean;
   /** Marks the recommended algorithm for the case (or case+slot). */
   primary?: boolean;
-  /** Where the algorithm came from (e.g. 'jperm'); user-authored if absent. */
-  source?: string;
   tags?: TagId[];
   /** Optional fingertrick video (e.g. a YouTube URL). */
   videoUrl?: string;

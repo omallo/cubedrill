@@ -1,5 +1,4 @@
-// PLL algorithms sourced from the proof-of-concept (~/dev/archive/cubedrill):
-// one curated algorithm per case. Curate freely.
+// Full PLL — all 21 permutation-of-the-last-layer cases, one algorithm each.
 import type { AlgorithmSet, Case, SetMembership } from '../types';
 
 export const pllSet: AlgorithmSet = {
@@ -38,8 +37,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-h/0',
         moves: "M2' U M2' U2 M2' U M2'",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -52,8 +50,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-z/0',
         moves: "M' U M2' U M2' U M' U2 M2'",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -66,8 +63,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-ua/0',
         moves: "(R U' R U) (R U R U') R' U' R2",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -80,8 +76,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-ub/0',
         moves: "R2 U (R U R' U') (R' U' R' U) R'",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -94,8 +89,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-aa/0',
         moves: "x (R' U R') D2 (R U' R') D2 R2",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -108,8 +102,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-ab/0',
         moves: "x R2' D2 (R U R') D2 (R U' R)",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -122,8 +115,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-e/0',
         moves: "(R' U' R' D') (R U' R' D) (R U R' D') (R U R' D) R2",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -136,8 +128,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-f/0',
         moves: "R' U' F' (R U R' U') R' F (R2 U' R' U') (R U R' U) R",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -150,8 +141,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-ja/0',
         moves: "(L' U' L) F (L' U' L U) L F' (L2 U L)",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -164,8 +154,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-jb/0',
         moves: "(R U R') F' (R U R' U') R' F (R2 U' R')",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -178,8 +167,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-ra/0',
         moves: "(R U' R' U') (R U R) D (R' U' R) D' (R' U2 R')",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -192,8 +180,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-rb/0',
         moves: "(R' U2 R') D' (R U' R') D (R U R U') (R' U' R)",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -206,8 +193,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-t/0',
         moves: "(R U R' U') R' F (R2 U' R' U') (R U R') F'",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -220,8 +206,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-y/0',
         moves: "F (R U' R' U') (R U R') F' (R U R' U') (R' F R F')",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -234,8 +219,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-v/0',
         moves: "R' (U R' U' R) D' R' D R' (U D') R2 U' R2' D R2",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -248,8 +232,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-na/0',
         moves: "(R U R' U) (R U R') F' (R U R' U') R' F (R2 U' R' U2) (R U' R')",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -262,8 +245,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-nb/0',
         moves: "(L' U' L U') (L' U' L) F (L' U' L U) L F' (L2' U L U2') (L' U L)",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -276,8 +258,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-ga/0',
         moves: "(R2 U R' U) (R' U' R U') R2 (U' D) (R' U R) D'",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -290,8 +271,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-gb/0',
         moves: "(R' U' R) (U D') R2 U (R' U R U' R) U' R2' D",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -304,8 +284,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-gc/0',
         moves: "R2' U' R U' (R U R') U R2 (U D') (R U' R') D",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   },
@@ -318,8 +297,7 @@ export const pllCases: Case[] = [
       {
         id: 'pll-gd/0',
         moves: "(R U R') (U' D) R2 U' (R U' R' U) R' U R2 D'",
-        primary: true,
-        source: 'poc'
+        primary: true
       }
     ]
   }

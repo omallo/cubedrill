@@ -1,8 +1,7 @@
-// 2-Look PLL — the beginner-friendly two-step approach to permuting the last
-// layer, sourced from jperm.net (/algs/2lookpll), one recommended algorithm per
-// case. The edge-permutation step is exactly the full PLL Ua/Ub/H/Z cases,
-// reused via SetMembership; the corner-permutation step adds the pure CPLL cases
-// that exist only in the two-look world (edges ignored).
+// 2-Look PLL — permute the last layer in two steps. The edge-permutation step is
+// exactly the full PLL Ua/Ub/H/Z cases, reused via SetMembership; the
+// corner-permutation step adds the pure CPLL cases that exist only in the
+// two-look world (edges ignored).
 import type { AlgorithmSet, Case, SetMembership } from '../types';
 
 export const twoLookPllSet: AlgorithmSet = {
@@ -30,8 +29,7 @@ export const twoLookPllCases: Case[] = [
       {
         id: 'pll-cp-adjacent/0',
         moves: "R U R' U' R' F R2 U' R' U' R U R' F'",
-        primary: true,
-        source: 'jperm'
+        primary: true
       }
     ]
   },
@@ -44,8 +42,7 @@ export const twoLookPllCases: Case[] = [
       {
         id: 'pll-cp-diagonal/0',
         moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'",
-        primary: true,
-        source: 'jperm'
+        primary: true
       }
     ]
   }

@@ -1,8 +1,7 @@
-// 2-Look OLL — the beginner-friendly two-step approach to orienting the last
-// layer, sourced from jperm.net (/algs/2lookoll), one recommended algorithm per
-// case. The corner-orientation step is exactly the full OLL cases 21-27 (all
-// edges oriented), reused via SetMembership; the edge-orientation step adds the
-// few cases that exist only in the two-look world (corners ignored).
+// 2-Look OLL — orient the last layer in two steps. The corner-orientation step
+// is exactly the full OLL cases 21-27 (all edges oriented), reused via
+// SetMembership; the edge-orientation step adds the few cases that exist only in
+// the two-look world (corners ignored).
 import type { AlgorithmSet, Case, SetMembership } from '../types';
 
 export const twoLookOllSet: AlgorithmSet = {
@@ -26,14 +25,14 @@ export const twoLookOllCases: Case[] = [
     phaseId: 'oll',
     name: 'Line',
     prob: 2,
-    algorithms: [{ id: 'oll-eo-line/0', moves: "F R U R' U' F'", primary: true, source: 'jperm' }]
+    algorithms: [{ id: 'oll-eo-line/0', moves: "F R U R' U' F'", primary: true }]
   },
   {
     id: 'oll-eo-l',
     phaseId: 'oll',
     name: 'L-Shape',
     prob: 4,
-    algorithms: [{ id: 'oll-eo-l/0', moves: "f R U R' U' f'", primary: true, source: 'jperm' }]
+    algorithms: [{ id: 'oll-eo-l/0', moves: "f R U R' U' f'", primary: true }]
   },
   {
     id: 'oll-eo-dot',
@@ -44,8 +43,7 @@ export const twoLookOllCases: Case[] = [
       {
         id: 'oll-eo-dot/0',
         moves: "F R U R' U' F' f R U R' U' f'",
-        primary: true,
-        source: 'jperm'
+        primary: true
       }
     ]
   }

@@ -3,6 +3,7 @@
   import { fade, fly } from 'svelte/transition';
   import Sidebar from './sidebar.svelte';
   import Header from './header.svelte';
+  import KeyboardShortcuts from './keyboard-shortcuts.svelte';
 
   type Props = {
     children?: Snippet;
@@ -47,5 +48,8 @@
     </main>
   </div>
 </div>
+
+<!-- Global keyboard-shortcuts overlay (opens on `?`, mounted once). -->
+<KeyboardShortcuts />
 
 <svelte:window onkeydown={(e) => e.key === 'Escape' && closeMobile()} />

@@ -9,11 +9,10 @@
     ArrowLeft,
     ArrowRight,
     Shuffle,
-    Lightbulb,
-    Boxes,
     FlipHorizontal2
   } from 'lucide-svelte';
-  import { Button, Card, LearningStatusControl } from '$lib/components';
+  import { Button, Card, LearningStatusControl, CubeViewToggles } from '$lib/components';
+  import { display } from '$lib/display.svelte';
   // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
   import CubePlayer from '$lib/components/cube/cube-player.svelte';
   import { setupScramble } from '$lib/components/cube/orientation';
@@ -55,7 +54,6 @@
   // Every case in a set shares a phase, so rendering config is constant here.
   const phase = cases[0] ? getPhase(cases[0].case.phaseId) : undefined;
   const stickering = phase ? maskToStickering[phase.mask] : 'full';
-  const canToggleViz = (phase?.supportedVisualizations.length ?? 0) > 1;
 
   // --- Order & position -----------------------------------------------------
   let shuffled = $state(false);
@@ -86,8 +84,9 @@
   // `recognizing` (timer running, solution hidden) and `revealed` (solution shown,
   // timer stopped). Nothing auto-starts: you leave the gate on your own action.
   let stage = $state<'ready' | 'recognizing' | 'revealed'>('ready');
-  let viz = $state<'2D' | '3D'>(phase?.defaultVisualization ?? '3D');
-  let hint = $state(false);
+  // Visualization + hint facelets come from the shared display store, so the
+  // choice carries over to/from the list view.
+  const viz = $derived(display.resolveViz(phase));
   // Show the setup scramble (for practising on a normal, non-smart cube). Off by
   // default — recognition uses the on-screen cube as the prompt, not the scramble.
   let showScramble = $state(false);
@@ -176,7 +175,7 @@
         cube?.reset();
         break;
       case 'h':
-        hint = !hint;
+        display.toggleHint();
         break;
       case 'c':
         showScramble = !showScramble;
@@ -185,7 +184,7 @@
         toggleShuffle();
         break;
       case 'v':
-        if (canToggleViz) viz = viz === '2D' ? '3D' : '2D';
+        if (display.canToggleViz(phase)) display.toggleViz(phase);
         break;
       case 'm':
         if (current) personal.cycle(current.case.id, current.slot);
@@ -222,7 +221,7 @@
         moves={alg?.moves ?? ''}
         {stickering}
         visualization={viz}
-        hintFacelets={hint}
+        hintFacelets={display.hintFacelets}
       />
       <span
         class="absolute top-2 left-2 rounded-md bg-surface/80 px-2 py-0.5 font-mono text-xs text-muted-foreground tabular-nums ring-1 ring-border backdrop-blur transition-opacity"
@@ -303,15 +302,6 @@
         </button>
         <button
           type="button"
-          aria-pressed={hint}
-          title="Hint facelets (h)"
-          onclick={() => (hint = !hint)}
-          class={toggleClass(hint)}
-        >
-          <Lightbulb size={15} />
-        </button>
-        <button
-          type="button"
           aria-pressed={showScramble}
           title="Show setup scramble (c)"
           onclick={() => (showScramble = !showScramble)}
@@ -319,18 +309,7 @@
         >
           <Box size={15} />
         </button>
-        {#if canToggleViz}
-          <button
-            type="button"
-            aria-pressed={viz === '3D'}
-            title="Toggle 2D / 3D (v)"
-            onclick={() => (viz = viz === '2D' ? '3D' : '2D')}
-            class={cn(toggleClass(viz === '3D'), 'w-auto px-2 text-xs font-semibold')}
-          >
-            <Boxes size={15} />
-            {viz}
-          </button>
-        {/if}
+        <CubeViewToggles {phase} />
       </div>
 
       <Button variant="primary" size="sm" onclick={() => go(1)} aria-label="Next case">
@@ -339,9 +318,7 @@
     </div>
 
     <p class="mt-6 text-center text-xs text-muted-foreground">
-      <kbd class="font-sans">Space</kbd> start / reveal / next ·
-      <kbd class="font-sans">←</kbd> <kbd class="font-sans">→</kbd> move ·
-      <kbd class="font-sans">c</kbd> scramble · <kbd class="font-sans">m</kbd> mark
+      Press <kbd class="font-sans">?</kbd> for keyboard shortcuts
     </p>
   </div>
 {/if}

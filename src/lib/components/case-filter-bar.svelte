@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
   import { X } from 'lucide-svelte';
   import { cn } from '$lib/utils/cn';
   import type { LearningStatus, SetGroup } from '$lib/domain';
@@ -17,6 +18,8 @@
     ontoggleStatus: (status: LearningStatus) => void;
     onsetGroup: (id: string | null) => void;
     onclear: () => void;
+    /** Optional view controls (e.g. 2D/3D + hint toggles) shown on the right. */
+    controls?: Snippet;
   };
 
   let {
@@ -27,7 +30,8 @@
     total,
     ontoggleStatus,
     onsetGroup,
-    onclear
+    onclear,
+    controls
   }: Props = $props();
 
   const ALL_STATUSES: LearningStatus[] = ['not-learned', 'learning', 'mastered'];
@@ -84,6 +88,9 @@
       >
         <X size={14} /> Clear
       </button>
+    {/if}
+    {#if controls}
+      <div class="flex items-center gap-1.5">{@render controls()}</div>
     {/if}
   </div>
 </div>

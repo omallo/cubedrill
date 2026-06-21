@@ -2,12 +2,19 @@
   import { ArrowLeft, List, Dumbbell, Play, RotateCcw, FlipHorizontal2 } from 'lucide-svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import { PageHeader, Card, LearningStatusControl, CaseFilterBar } from '$lib/components';
+  import {
+    PageHeader,
+    Card,
+    LearningStatusControl,
+    CaseFilterBar,
+    CubeViewToggles
+  } from '$lib/components';
   import { CaseDiagram } from '$lib/components/cube';
   // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
   import AlgorithmTrainer from '$lib/components/train/algorithm-trainer.svelte';
   import {
     getSet,
+    getPhase,
     caseGroupsInSet,
     primaryAlgorithm,
     slotsForCase,
@@ -17,10 +24,13 @@
     type SetGroup
   } from '$lib/domain';
   import { personal } from '$lib/personal.svelte';
+  import { display } from '$lib/display.svelte';
   import { cn } from '$lib/utils/cn';
 
   const set = $derived(getSet(page.params.set ?? ''));
   const allGroups = $derived(set ? caseGroupsInSet(set.id) : []);
+  // Every case in a set shares a phase; it drives the 2D/3D + hint view controls.
+  const phase = $derived(getPhase(allGroups[0]?.cases[0]?.case.phaseId ?? ''));
   const allCaseIds = $derived(allGroups.flatMap((g) => g.cases.map((c) => c.case.id)));
   const totalCases = $derived(allCaseIds.length);
   const masteredCount = $derived(personal.count(allCaseIds, 'mastered'));
@@ -157,6 +167,18 @@
   // Per-row CaseDiagram refs so the row's Play/Reset controls can drive the cube.
   const diagrams: Record<string, CaseDiagram> = {};
 
+  // List-mode view shortcuts mirroring the trainer's (which owns these in train
+  // mode via its own handler). Skipped while typing or with a modifier held.
+  function onListKeydown(e: KeyboardEvent) {
+    if (mode !== 'list' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
+    if (e.key === 'v') {
+      if (display.canToggleViz(phase)) display.toggleViz(phase);
+    } else if (e.key === 'h') {
+      display.toggleHint();
+    }
+  }
+
   const modeBtn = (active: boolean) =>
     cn(
       'inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium transition-colors',
@@ -167,6 +189,12 @@
 </script>
 
 <svelte:head><title>{set?.name ?? 'Algorithms'} · Cubedrill</title></svelte:head>
+
+<svelte:window onkeydown={onListKeydown} />
+
+{#snippet viewControls()}
+  <CubeViewToggles {phase} />
+{/snippet}
 
 <a
   href="/algorithms"
@@ -221,6 +249,7 @@
     ontoggleStatus={toggleStatus}
     onsetGroup={setGroup}
     onclear={clearFilters}
+    controls={mode === 'list' ? viewControls : undefined}
   />
 
   {#if mode === 'train'}
@@ -262,6 +291,8 @@
                 <CaseDiagram
                   moves={alg?.moves ?? ''}
                   phaseId={entry.case.phaseId}
+                  visualization={display.resolveViz(phase)}
+                  hintFacelets={display.hintFacelets}
                   class="w-24 shrink-0"
                   bind:this={diagrams[entry.case.id]}
                 />

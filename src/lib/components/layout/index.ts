@@ -3,3 +3,4 @@ export { default as Sidebar } from './sidebar.svelte';
 export { default as Header } from './header.svelte';
 export { default as BrandLogo } from './brand-logo.svelte';
 export { default as ThemeToggle } from './theme-toggle.svelte';
+export { default as KeyboardShortcuts } from './keyboard-shortcuts.svelte';

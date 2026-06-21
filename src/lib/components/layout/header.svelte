@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { Menu, Bluetooth } from 'lucide-svelte';
+  import { Menu, Bluetooth, Keyboard } from 'lucide-svelte';
   import { page } from '$app/state';
   import { allNavItems } from '$lib/config/navigation';
   import { Button } from '$lib/components/ui';
+  import { shortcutsOverlay } from '$lib/shortcuts.svelte';
   import ThemeToggle from './theme-toggle.svelte';
 
   type Props = {
@@ -42,6 +43,15 @@
     <Button variant="ghost" size="sm" class="hidden sm:inline-flex" disabled>
       <Bluetooth size={16} />
       <span>Connect cube</span>
+    </Button>
+    <Button
+      variant="ghost"
+      size="icon"
+      onclick={() => shortcutsOverlay.toggle()}
+      aria-label="Keyboard shortcuts"
+      title="Keyboard shortcuts (?)"
+    >
+      <Keyboard size={20} />
     </Button>
     <ThemeToggle />
   </div>

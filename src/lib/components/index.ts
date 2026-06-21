@@ -6,6 +6,7 @@ export * from './layout';
 export { default as PageHeader } from './page-header.svelte';
 export { default as LearningStatusControl, STATUS_META } from './learning-status-control.svelte';
 export { default as CaseFilterBar } from './case-filter-bar.svelte';
+export { default as CubeViewToggles } from './cube-view-toggles.svelte';
 export { default as SetProgressBar } from './set-progress-bar.svelte';
 export { default as PlaceholderView } from './placeholder-view.svelte';
 export { default as StatCard } from './stat-card.svelte';

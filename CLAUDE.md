@@ -55,8 +55,9 @@ Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
   reactive `entries` keyed by `caseId`, mirrored to `localStorage`
   (`cubedrill-personal`) on change. API: `status/setStatus/cycle/count`. Status is
   per-case (shared across sets — e.g. OLL 27 in Full + 2-Look); absence ⇒
-  `not-learned` (entry dropped to keep storage lean). `chosenAlgorithmId` and
-  authored algs are modelled but not wired yet.
+  `not-learned` (entry dropped to keep storage lean). Authored algs are modelled
+  but not wired yet. (Algorithms carry no `id` — the planned alg-selection feature
+  will pick its own identifier scheme when it lands.)
 - **`src/lib/components/`** — `ui/` (Button, Card, Badge), `layout/` (AppShell,
   Sidebar, Header, BrandLogo, ThemeToggle), `cube/` (CubePlayer, CaseDiagram, plus
   `orientation.ts` — net-rotation normalization + setup-scramble derivation),
@@ -207,9 +208,9 @@ case; `play()` solves). cubing.js default orientation is **white U, green F**.
   recognition too — fine for the normal-cube path; revisit only if pure-recognition
   drilling wants it hidden behind a toggle.)
 - Still to come:
-  - **Algorithm selection** — multiple algs per case + user picks one
-    (`chosenAlgorithmId` already in the model; the trainer currently drills the
-    `primary`/first alg).
+  - **Algorithm selection** — multiple algs per case + user picks one (needs a
+    stable per-alg identifier to persist the choice; the trainer currently drills
+    the `primary`/first alg).
   - **Global ⌘K search** — the deferred text-search home (in-set text search was
     intentionally skipped as low-value; see below).
   - **F2L slot filter** in `CaseFilterBar` (stubbed; waits on the mirroring work).

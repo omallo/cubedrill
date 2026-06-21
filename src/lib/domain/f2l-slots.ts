@@ -57,7 +57,6 @@ export function withDerivedSlots(c: Case): Case {
   if (!fr) return c;
 
   const derive = (slot: F2LSlot, moves: string, plane: Plane): Algorithm => ({
-    id: `${c.id}/${slot.toLowerCase()}`,
     moves: mirrorMoves(moves, plane),
     slot,
     derived: true,

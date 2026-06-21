@@ -81,7 +81,6 @@ export const ollCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'oll-1/0',
         moves: "R U2 R' R' F R F' U2 R' F R F'",
         primary: true
       }
@@ -94,16 +93,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-2/0',
         moves: "r U r' U2 r U2 R' U2 R U' r'",
         primary: true
       },
       {
-        id: 'oll-2/1',
         moves: "y' F R U R' U' F' f R U R' U' f'"
       },
       {
-        id: 'oll-2/2',
         moves: "y' F R U R' U' S R U R' U' f'"
       }
     ]
@@ -115,16 +111,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-3/0',
         moves: "r' R2 U R' U r U2 r' U M'",
         primary: true
       },
       {
-        id: 'oll-3/1',
         moves: "y F U R U' R' F' U F R U R' U' F'"
       },
       {
-        id: 'oll-3/2',
         moves: "y' f R U R' U' f' U' F R U R' U' F'"
       }
     ]
@@ -136,16 +129,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-4/0',
         moves: "M U' r U2 r' U' R U' R' M'",
         primary: true
       },
       {
-        id: 'oll-4/1',
         moves: "y F U R U' R' F' U' F R U R' U' F'"
       },
       {
-        id: 'oll-4/2',
         moves: "y' f R U R' U' f' U F R U R' U' F'"
       }
     ]
@@ -157,12 +147,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-5/0',
         moves: "l' U2 L U L' U l",
         primary: true
       },
       {
-        id: 'oll-5/1',
         moves: "y2 r' U2 R U R' U r"
       }
     ]
@@ -174,7 +162,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-6/0',
         moves: "r U2 R' U' R U' r'",
         primary: true
       }
@@ -187,7 +174,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-7/0',
         moves: "r U R' U R U2 r'",
         primary: true
       }
@@ -200,16 +186,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-8/0',
         moves: "l' U' L U' L' U2 l",
         primary: true
       },
       {
-        id: 'oll-8/1',
         moves: "R U2 R' U2 R' F R F'"
       },
       {
-        id: 'oll-8/2',
         moves: "y2 r' U' R U' R' U2 r"
       }
     ]
@@ -221,7 +204,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-9/0',
         moves: "R U R' U' R' F R2 U R' U' F'",
         primary: true
       }
@@ -234,12 +216,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-10/0',
         moves: "R U R' U R' F R F' R U2 R'",
         primary: true
       },
       {
-        id: 'oll-10/1',
         moves: "y2 r U R' U R U' R' U' r' R (U R U' R')"
       }
     ]
@@ -251,12 +231,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-11/0',
         moves: "r U R' U R' F R F' R U2 r'",
         primary: true
       },
       {
-        id: 'oll-11/1',
         moves: "y2 r' R2 U R' U R U2 R' U M'"
       }
     ]
@@ -268,7 +246,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-12/0',
         moves: "M' R' U' R U' R' U2 R U' R r'",
         primary: true
       }
@@ -281,12 +258,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-13/0',
         moves: "F U R U' R2 F' R U R U' R'",
         primary: true
       },
       {
-        id: 'oll-13/1',
         moves: "r U' r' U' r U r' y' R' U R"
       }
     ]
@@ -298,7 +273,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-14/0',
         moves: "R' F R U R' F' R F U' F'",
         primary: true
       }
@@ -311,12 +285,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-15/0',
         moves: "l' U' l L' U' L U l' U l",
         primary: true
       },
       {
-        id: 'oll-15/1',
         moves: "y2 r' U' r R' U' R U r' U r"
       }
     ]
@@ -328,7 +300,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-16/0',
         moves: "r U r' R U R' U' r U' r'",
         primary: true
       }
@@ -341,12 +312,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-17/0',
         moves: "F R' F' R2 r' U R U' R' U' M'",
         primary: true
       },
       {
-        id: 'oll-17/1',
         moves: "y2 R U R' U R' F R F' U2 R' F R F'"
       }
     ]
@@ -358,12 +327,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-18/0',
         moves: "r U R' U R U2 r' r' U' R U' R' U2 r",
         primary: true
       },
       {
-        id: 'oll-18/1',
         moves: "y R U2 R' R' F R F' U2 M' (U R U' r')"
       }
     ]
@@ -375,7 +342,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-19/0',
         moves: "r' R U R U R' U' M' R' F R F'",
         primary: true
       }
@@ -388,12 +354,10 @@ export const ollCases: Case[] = [
     prob: 1,
     algorithms: [
       {
-        id: 'oll-20/0',
         moves: "r U R' U' M2 U R U' R' U' M'",
         primary: true
       },
       {
-        id: 'oll-20/1',
         moves: "r' R U (R U R' U') M2 U R U' r'"
       }
     ]
@@ -405,12 +369,10 @@ export const ollCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'oll-21/0',
         moves: "R U2 R' U' R U R' U' R U' R'",
         primary: true
       },
       {
-        id: 'oll-21/1',
         moves: "y R U R' U R U' R' U R U2 R'"
       }
     ]
@@ -422,7 +384,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-22/0',
         moves: "R U2 (R2 U' R2 U' R2) U2 R",
         primary: true
       }
@@ -435,12 +396,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-23/0',
         moves: "R2 D' R U2 R' D R U2 R",
         primary: true
       },
       {
-        id: 'oll-23/1',
         moves: "y2 R2 D R' U2 R D' R' U2 R'"
       }
     ]
@@ -452,12 +411,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-24/0',
         moves: "r U R' U' r' F R F'",
         primary: true
       },
       {
-        id: 'oll-24/1',
         moves: "y R U R D R' U' R D' R2"
       }
     ]
@@ -469,12 +426,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-25/0',
         moves: "F' r U R' U' r' F R",
         primary: true
       },
       {
-        id: 'oll-25/1',
         moves: "y' R' F R B' R' F' R B"
       }
     ]
@@ -486,12 +441,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-26/0',
         moves: "(R U2 R') U' R U' R'",
         primary: true
       },
       {
-        id: 'oll-26/1',
         moves: "y' R' U' R U' R' U2 R"
       }
     ]
@@ -503,12 +456,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-27/0',
         moves: "R U R' U R U2 R'",
         primary: true
       },
       {
-        id: 'oll-27/1',
         moves: "y' R' U2 (R U R' U) R"
       }
     ]
@@ -520,7 +471,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-28/0',
         moves: "r U R' U' r' R U R U' R'",
         primary: true
       }
@@ -533,7 +483,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-29/0',
         moves: "R U R' U' R U' R' F' U' F R U R'",
         primary: true
       }
@@ -546,12 +495,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-30/0',
         moves: "F R' F R2 U' R' U' R U R' F2",
         primary: true
       },
       {
-        id: 'oll-30/1',
         moves: "F U (R U2 R' U') R U2 R' U' F'"
       }
     ]
@@ -563,7 +510,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-31/0',
         moves: "R' U' F U R U' R' F' R",
         primary: true
       }
@@ -576,12 +522,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-32/0',
         moves: "L U F' U' L' U L F L'",
         primary: true
       },
       {
-        id: 'oll-32/1',
         moves: "y2 S R U R' U' R' F R f'"
       }
     ]
@@ -593,7 +537,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-33/0',
         moves: "R U R' U' R' F R F'",
         primary: true
       }
@@ -606,12 +549,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-34/0',
         moves: "R U R2 U' R' F R U R U' F'",
         primary: true
       },
       {
-        id: 'oll-34/1',
         moves: "R U R' U' B' R' F R F' B"
       }
     ]
@@ -623,7 +564,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-35/0',
         moves: "R U2 R' R' F R F' R U2 R'",
         primary: true
       }
@@ -636,12 +576,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-36/0',
         moves: "L' U' L U' L' U L U L F' L' F",
         primary: true
       },
       {
-        id: 'oll-36/1',
         moves: "y2 R' U' R U' R' U R U R B' R' B"
       }
     ]
@@ -653,12 +591,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-37/0',
         moves: "F R' F' R U R U' R'",
         primary: true
       },
       {
-        id: 'oll-37/1',
         moves: "F R U' R' U' R U R' F'"
       }
     ]
@@ -670,7 +606,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-38/0',
         moves: "R U R' U R U' R' U' R' F R F'",
         primary: true
       }
@@ -683,12 +618,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-39/0',
         moves: "L F' L' U' L U F U' L'",
         primary: true
       },
       {
-        id: 'oll-39/1',
         moves: "y2 R B' R' U' R U B U' R'"
       }
     ]
@@ -700,7 +633,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-40/0',
         moves: "R' F R U R' U' F' U R",
         primary: true
       }
@@ -713,7 +645,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-41/0',
         moves: "R U R' U R U2 R' F R U R' U' F'",
         primary: true
       }
@@ -726,7 +657,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-42/0',
         moves: "R' U' R U' R' U2 R F R U R' U' F'",
         primary: true
       }
@@ -739,12 +669,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-43/0',
         moves: "F' U' L' U L F",
         primary: true
       },
       {
-        id: 'oll-43/1',
         moves: "R' U' F R' F' R U R"
       }
     ]
@@ -756,12 +684,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-44/0',
         moves: "F U R U' R' F'",
         primary: true
       },
       {
-        id: 'oll-44/1',
         moves: "y2 f R U R' U' f'"
       }
     ]
@@ -773,7 +699,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-45/0',
         moves: "F R U R' U' F'",
         primary: true
       }
@@ -786,7 +711,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-46/0',
         moves: "R' U' R' F R F' U R",
         primary: true
       }
@@ -799,16 +723,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-47/0',
         moves: "R' U' R' F R F' R' F R F' U R",
         primary: true
       },
       {
-        id: 'oll-47/1',
         moves: "F' L' U' L U L' U' L U F"
       },
       {
-        id: 'oll-47/2',
         moves: "y' F U R U' R' F' R U R' U R U2 R'"
       }
     ]
@@ -820,7 +741,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-48/0',
         moves: "F R U R' U' R U R' U' F'",
         primary: true
       }
@@ -833,7 +753,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-49/0',
         moves: "r U' r2 U r2 U r2 U' r",
         primary: true
       }
@@ -846,7 +765,6 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-50/0',
         moves: "r' U r2 U' r2 U' r2 U r'",
         primary: true
       }
@@ -859,12 +777,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-51/0',
         moves: "F U R U' R' U R U' R' F'",
         primary: true
       },
       {
-        id: 'oll-51/1',
         moves: "y2 f R U R' U' R U R' U' f'"
       }
     ]
@@ -876,16 +792,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-52/0',
         moves: "R U R' U R U' B U' B' R'",
         primary: true
       },
       {
-        id: 'oll-52/1',
         moves: "y2 R' F' U' F U' (R U R' U) R"
       },
       {
-        id: 'oll-52/2',
         moves: "R U R' U R U' y R U' R' F'"
       }
     ]
@@ -897,16 +810,13 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-53/0',
         moves: "l' U2 L U L' U' L U L' U l",
         primary: true
       },
       {
-        id: 'oll-53/1',
         moves: "y2 r' U2 (R U R' U') R U R' U r"
       },
       {
-        id: 'oll-53/2',
         moves: "y r' U' R U' R' U R U' R' U2 r"
       }
     ]
@@ -918,12 +828,10 @@ export const ollCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'oll-54/0',
         moves: "(r U2 R' U') R U R' U' R U' r'",
         primary: true
       },
       {
-        id: 'oll-54/1',
         moves: "y r U R' U R U' R' U R U2 r'"
       }
     ]
@@ -935,12 +843,10 @@ export const ollCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'oll-55/0',
         moves: "R' F R U R U' R2 F' R2 U' R' U R U R'",
         primary: true
       },
       {
-        id: 'oll-55/1',
         moves: "y R U2 R2 U' R U' R' U2 F R F'"
       }
     ]
@@ -952,16 +858,13 @@ export const ollCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'oll-56/0',
         moves: "(r' U' r) U' R' U R U' R' U R r' U r",
         primary: true
       },
       {
-        id: 'oll-56/1',
         moves: "(r U r') U R U' R' U R U' R' (r U' r')"
       },
       {
-        id: 'oll-56/2',
         moves: "(r U r') U R U' R' U R U' M' U' r'"
       }
     ]
@@ -973,7 +876,6 @@ export const ollCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'oll-57/0',
         moves: "R U R' U' M' U R U' r'",
         primary: true
       }

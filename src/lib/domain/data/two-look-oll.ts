@@ -25,14 +25,14 @@ export const twoLookOllCases: Case[] = [
     phaseId: 'oll',
     name: 'Line',
     prob: 2,
-    algorithms: [{ id: 'oll-eo-line/0', moves: "F R U R' U' F'", primary: true }]
+    algorithms: [{ moves: "F R U R' U' F'", primary: true }]
   },
   {
     id: 'oll-eo-l',
     phaseId: 'oll',
     name: 'L-Shape',
     prob: 4,
-    algorithms: [{ id: 'oll-eo-l/0', moves: "f R U R' U' f'", primary: true }]
+    algorithms: [{ moves: "f R U R' U' f'", primary: true }]
   },
   {
     id: 'oll-eo-dot',
@@ -41,7 +41,6 @@ export const twoLookOllCases: Case[] = [
     prob: 1,
     algorithms: [
       {
-        id: 'oll-eo-dot/0',
         moves: "F R U R' U' F' f R U R' U' f'",
         primary: true
       }

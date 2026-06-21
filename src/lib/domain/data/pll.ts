@@ -32,7 +32,6 @@ export const pllCases: Case[] = [
     prob: 1,
     algorithms: [
       {
-        id: 'pll-h/0',
         moves: "M2' U M2' U2 M2' U M2'",
         primary: true
       }
@@ -45,7 +44,6 @@ export const pllCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'pll-z/0',
         moves: "M' U M2' U M2' U M' U2 M2'",
         primary: true
       }
@@ -58,7 +56,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-ua/0',
         moves: "(R U' R U) (R U R U') R' U' R2",
         primary: true
       }
@@ -71,7 +68,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-ub/0',
         moves: "R2 U (R U R' U') (R' U' R' U) R'",
         primary: true
       }
@@ -84,7 +80,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-aa/0',
         moves: "x (R' U R') D2 (R U' R') D2 R2",
         primary: true
       }
@@ -97,7 +92,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-ab/0',
         moves: "x R2' D2 (R U R') D2 (R U' R)",
         primary: true
       }
@@ -110,7 +104,6 @@ export const pllCases: Case[] = [
     prob: 2,
     algorithms: [
       {
-        id: 'pll-e/0',
         moves: "(R' U' R' D') (R U' R' D) (R U R' D') (R U R' D) R2",
         primary: true
       }
@@ -123,7 +116,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-f/0',
         moves: "R' U' F' (R U R' U') R' F (R2 U' R' U') (R U R' U) R",
         primary: true
       }
@@ -136,7 +128,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-ja/0',
         moves: "(L' U' L) F (L' U' L U) L F' (L2 U L)",
         primary: true
       }
@@ -149,7 +140,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-jb/0',
         moves: "(R U R') F' (R U R' U') R' F (R2 U' R')",
         primary: true
       }
@@ -162,7 +152,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-ra/0',
         moves: "(R U' R' U') (R U R) D (R' U' R) D' (R' U2 R')",
         primary: true
       }
@@ -175,7 +164,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-rb/0',
         moves: "(R' U2 R') D' (R U' R') D (R U R U') (R' U' R)",
         primary: true
       }
@@ -188,7 +176,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-t/0',
         moves: "(R U R' U') R' F (R2 U' R' U') (R U R') F'",
         primary: true
       }
@@ -201,7 +188,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-y/0',
         moves: "F (R U' R' U') (R U R') F' (R U R' U') (R' F R F')",
         primary: true
       }
@@ -214,7 +200,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-v/0',
         moves: "R' (U R' U' R) D' R' D R' (U D') R2 U' R2' D R2",
         primary: true
       }
@@ -227,7 +212,6 @@ export const pllCases: Case[] = [
     prob: 1,
     algorithms: [
       {
-        id: 'pll-na/0',
         moves: "(R U R' U) (R U R') F' (R U R' U') R' F (R2 U' R' U2) (R U' R')",
         primary: true
       }
@@ -240,7 +224,6 @@ export const pllCases: Case[] = [
     prob: 1,
     algorithms: [
       {
-        id: 'pll-nb/0',
         moves: "(L' U' L U') (L' U' L) F (L' U' L U) L F' (L2' U L U2') (L' U L)",
         primary: true
       }
@@ -253,7 +236,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-ga/0',
         moves: "(R2 U R' U) (R' U' R U') R2 (U' D) (R' U R) D'",
         primary: true
       }
@@ -266,7 +248,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-gb/0',
         moves: "(R' U' R) (U D') R2 U (R' U R U' R) U' R2' D",
         primary: true
       }
@@ -279,7 +260,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-gc/0',
         moves: "R2' U' R U' (R U R') U R2 (U D') (R U' R') D",
         primary: true
       }
@@ -292,7 +272,6 @@ export const pllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-gd/0',
         moves: "(R U R') (U' D) R2 U' (R U' R' U) R' U R2 D'",
         primary: true
       }

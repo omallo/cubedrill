@@ -47,13 +47,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 21',
     algorithms: [
       {
-        id: 'f2l-21/fr',
         moves: "U2' (R U R') U (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-21/br',
         moves: "y U2' (R U R') U (R U' R')",
         slot: 'BR',
         primary: true
@@ -66,13 +64,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 22',
     algorithms: [
       {
-        id: 'f2l-22/fr',
         moves: "y U2 (L' U' L) U' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-22/br',
         moves: "U2' (R' U' R) U' (R' U R)",
         slot: 'BR',
         primary: true
@@ -85,13 +81,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 19',
     algorithms: [
       {
-        id: 'f2l-19/fr',
         moves: "U (R U2' R') U (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-19/br',
         moves: "y U (R U2' R') U (R U' R')",
         slot: 'BR',
         primary: true
@@ -104,13 +98,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 20',
     algorithms: [
       {
-        id: 'f2l-20/fr',
         moves: "y U' (L' U2 L) U' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-20/br',
         moves: "U' (R' U2' R) U' (R' U R)",
         slot: 'BR',
         primary: true
@@ -123,13 +115,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 23',
     algorithms: [
       {
-        id: 'f2l-23/fr',
         moves: "U (R U' R') U' (R U' R') U (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-23/br',
         moves: "y U (R U' R') U' (R U' R') U (R U' R')",
         slot: 'BR',
         primary: true
@@ -142,13 +132,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 24',
     algorithms: [
       {
-        id: 'f2l-24/fr',
         moves: "y U' (L' U L) U (L' U L) U' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-24/br',
         moves: "U (R U R' U R U2' R2') U R",
         slot: 'BR',
         primary: true
@@ -161,13 +149,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 17',
     algorithms: [
       {
-        id: 'f2l-17/fr',
         moves: "(R U2' R') U' (R U R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-17/br',
         moves: "y (R U2' R') U' (R U R')",
         slot: 'BR',
         primary: true
@@ -180,13 +166,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 18',
     algorithms: [
       {
-        id: 'f2l-18/fr',
         moves: "y (L' U2 L) U (L' U' L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-18/br',
         moves: "(R' U2' R) U (R' U' R)",
         slot: 'BR',
         primary: true
@@ -199,13 +183,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 4',
     algorithms: [
       {
-        id: 'f2l-4/fr',
         moves: "(R U R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-4/br',
         moves: "y (R U R')",
         slot: 'BR',
         primary: true
@@ -218,13 +200,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 3',
     algorithms: [
       {
-        id: 'f2l-3/fr',
         moves: "y (L' U' L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-3/br',
         moves: "(R' U' R)",
         slot: 'BR',
         primary: true
@@ -237,13 +217,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 10',
     algorithms: [
       {
-        id: 'f2l-10/fr',
         moves: "U' (R U R') U (R U R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-10/br',
         moves: "y U' (R U R') U (R U R')",
         slot: 'BR',
         primary: true
@@ -256,13 +234,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 9',
     algorithms: [
       {
-        id: 'f2l-9/fr',
         moves: "y U (L' U' L) U' (L' U' L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-9/br',
         moves: "U (R' U' R) U' (R' U' R)",
         slot: 'BR',
         primary: true
@@ -275,13 +251,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 12',
     algorithms: [
       {
-        id: 'f2l-12/fr',
         moves: "(R U' R') U (R U' R') U2 (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-12/br',
         moves: "y (R U' R') U (R U' R') U2 (R U' R')",
         slot: 'BR',
         primary: true
@@ -294,13 +268,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 11',
     algorithms: [
       {
-        id: 'f2l-11/fr',
         moves: "y (L' U L) U' (L' U L) U2' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-11/br',
         moves: "R U2' R2' U' R2 U' R'",
         slot: 'BR',
         primary: true
@@ -313,13 +285,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 14',
     algorithms: [
       {
-        id: 'f2l-14/fr',
         moves: "U' (R U' R') U (R U R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-14/br',
         moves: "y U' (R U' R') U (R U R')",
         slot: 'BR',
         primary: true
@@ -332,13 +302,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 13',
     algorithms: [
       {
-        id: 'f2l-13/fr',
         moves: "y U (L' U L) U' (L' U' L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-13/br',
         moves: "U (R' U R) U' (R' U' R)",
         slot: 'BR',
         primary: true
@@ -351,13 +319,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 2',
     algorithms: [
       {
-        id: 'f2l-2/fr',
         moves: "y U' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-2/br',
         moves: "U' (R' U R)",
         slot: 'BR',
         primary: true
@@ -370,13 +336,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 1',
     algorithms: [
       {
-        id: 'f2l-1/fr',
         moves: "U (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-1/br',
         moves: "y U (R U' R')",
         slot: 'BR',
         primary: true
@@ -389,13 +353,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 8',
     algorithms: [
       {
-        id: 'f2l-8/fr',
         moves: "y U (L' U2 L) U2' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-8/br',
         moves: "U (R' U2' R) U (R' U2' R)",
         slot: 'BR',
         primary: true
@@ -408,13 +370,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 7',
     algorithms: [
       {
-        id: 'f2l-7/fr',
         moves: "U' (R U2' R') U2 (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-7/br',
         moves: "y U' (R U2' R') U2 (R U' R')",
         slot: 'BR',
         primary: true
@@ -427,13 +387,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 5',
     algorithms: [
       {
-        id: 'f2l-5/fr',
         moves: "U' (R U R') U2 (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-5/br',
         moves: "y U' (R U R') U2 (R U' R')",
         slot: 'BR',
         primary: true
@@ -446,13 +404,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 6',
     algorithms: [
       {
-        id: 'f2l-6/fr',
         moves: "y U (L' U' L) U2' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-6/br',
         moves: "U (R' U' R) U (R' U2' R)",
         slot: 'BR',
         primary: true
@@ -465,13 +421,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 15',
     algorithms: [
       {
-        id: 'f2l-15/fr',
         moves: "(R U R') U2 (R U' R') U (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-15/br',
         moves: "y (R U R') U2 (R U' R') U (R U' R')",
         slot: 'BR',
         primary: true
@@ -484,13 +438,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 16',
     algorithms: [
       {
-        id: 'f2l-16/fr',
         moves: "y (L' U' L) U2' (L' U L) U' (L' U L)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-16/br',
         moves: "(R' U' R) U2' (R' U R) U' (R' U R)",
         slot: 'BR',
         primary: true
@@ -503,13 +455,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 34',
     algorithms: [
       {
-        id: 'f2l-34/fr',
         moves: "U (R U R') U2 (R U R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-34/br',
         moves: "U (R' U R) U (R' U2' R)",
         slot: 'BR',
         primary: true
@@ -522,13 +472,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 33',
     algorithms: [
       {
-        id: 'f2l-33/fr',
         moves: "U' (R U' R') U2 (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-33/br',
         moves: "U' (R' U' R) U2' (R' U' R)",
         slot: 'BR',
         primary: true
@@ -541,13 +489,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 36',
     algorithms: [
       {
-        id: 'f2l-36/fr',
         moves: "U (F' U' F) U' (R U R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-36/br',
         moves: "U (R' U' R) U' (f R f')",
         slot: 'BR',
         primary: true
@@ -560,13 +506,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 35',
     algorithms: [
       {
-        id: 'f2l-35/fr',
         moves: "U' (R U R') U (F' U' F)",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-35/br',
         moves: "U' (f R f') U (R' U' R)",
         slot: 'BR',
         primary: true
@@ -579,13 +523,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 32',
     algorithms: [
       {
-        id: 'f2l-32/fr',
         moves: "(U R U' R') (U R U' R') (U R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-32/br',
         moves: "(U' R' U R) (U' R' U R) (U' R' U R)",
         slot: 'BR',
         primary: true
@@ -598,13 +540,11 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 31',
     algorithms: [
       {
-        id: 'f2l-31/fr',
         moves: "U' (R' F R F') (R U' R')",
         slot: 'FR',
         primary: true
       },
       {
-        id: 'f2l-31/br',
         moves: "(f R' f') (R' U2' R)",
         slot: 'BR',
         primary: true
@@ -617,7 +557,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 30',
     algorithms: [
       {
-        id: 'f2l-30/fr',
         moves: "(R U R') U' (R U R')",
         slot: 'FR',
         primary: true
@@ -630,7 +569,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 29',
     algorithms: [
       {
-        id: 'f2l-29/fr',
         moves: "y (L' U' L) U (L' U' L)",
         slot: 'FR',
         primary: true
@@ -643,7 +581,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 27',
     algorithms: [
       {
-        id: 'f2l-27/fr',
         moves: "(R U' R') U (R U' R') ",
         slot: 'FR',
         primary: true
@@ -656,7 +593,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 28',
     algorithms: [
       {
-        id: 'f2l-28/fr',
         moves: "y (L' U L) U' (L' U L)",
         slot: 'FR',
         primary: true
@@ -669,7 +605,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 25',
     algorithms: [
       {
-        id: 'f2l-25/fr',
         moves: "U' (R' F R F') (R U R')",
         slot: 'FR',
         primary: true
@@ -682,7 +617,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 26',
     algorithms: [
       {
-        id: 'f2l-26/fr',
         moves: "y U (L F' L' F) (L' U' L)",
         slot: 'FR',
         primary: true
@@ -695,7 +629,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 39',
     algorithms: [
       {
-        id: 'f2l-39/fr',
         moves: "(R U' R') U (R U2' R') U (R U' R')",
         slot: 'FR',
         primary: true
@@ -708,7 +641,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 38',
     algorithms: [
       {
-        id: 'f2l-38/fr',
         moves: "(R U' R') U' (R U R') U2 (R U' R')",
         slot: 'FR',
         primary: true
@@ -721,7 +653,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 41',
     algorithms: [
       {
-        id: 'f2l-41/fr',
         moves: "(R U' R') y U2 (L' U' L) U' (L' U L)",
         slot: 'FR',
         primary: true
@@ -734,7 +665,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 40',
     algorithms: [
       {
-        id: 'f2l-40/fr',
         moves: "(R U' R') y U (L' U' L) U' (L' U' L)",
         slot: 'FR',
         primary: true
@@ -747,7 +677,6 @@ export const f2lStandardCases: Case[] = [
     name: 'F2L 37',
     algorithms: [
       {
-        id: 'f2l-37/fr',
         moves: "(R U' R') y U (L' U2 L) U2' (L' U L)",
         slot: 'FR',
         primary: true

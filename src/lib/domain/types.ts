@@ -122,10 +122,8 @@ export interface SetMembership {
 // ---------------------------------------------------------------------------
 
 export type CaseId = string; // 'oll-27' | 'pll-t' | 'f2l-21'
-export type AlgorithmId = string; // 'oll-27/0' | 'pll-t/1' ...
 
 export interface Algorithm {
-  id: AlgorithmId;
   /** Move sequence in standard notation. The setup/scramble is derived. */
   moves: string;
   /** F2L only: the slot this algorithm is authored for. */
@@ -211,8 +209,6 @@ export interface PersonalEntry {
   /** F2L only: the slot this entry tracks. Absent for unsliced phases (OLL/PLL). */
   slot?: F2LSlot;
   status: LearningStatus;
-  /** The algorithm the user has chosen to learn (for this case+slot). */
-  chosenAlgorithmId?: AlgorithmId;
   /** ISO timestamp of the last change. */
   updatedAt: string;
 }

@@ -27,7 +27,6 @@ export const twoLookPllCases: Case[] = [
     prob: 4,
     algorithms: [
       {
-        id: 'pll-cp-adjacent/0',
         moves: "R U R' U' R' F R2 U' R' U' R U R' F'",
         primary: true
       }
@@ -40,7 +39,6 @@ export const twoLookPllCases: Case[] = [
     prob: 1,
     algorithms: [
       {
-        id: 'pll-cp-diagonal/0',
         moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'",
         primary: true
       }

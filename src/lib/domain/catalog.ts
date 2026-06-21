@@ -2,6 +2,8 @@ import type { Catalog, Method, Phase, Tag } from './types';
 import { f2lStandardSet, f2lStandardCases, f2lStandardMemberships } from './data/f2l';
 import { ollSet, ollCases, ollMemberships } from './data/oll';
 import { pllSet, pllCases, pllMemberships } from './data/pll';
+import { twoLookOllSet, twoLookOllCases, twoLookOllMemberships } from './data/two-look-oll';
+import { twoLookPllSet, twoLookPllCases, twoLookPllMemberships } from './data/two-look-pll';
 
 /**
  * The CFOP method and its phases. CFOP is the only method for now; the model
@@ -74,8 +76,14 @@ const tags: Tag[] = [];
 export const catalog: Catalog = {
   methods: [cfop],
   phases,
-  sets: [f2lStandardSet, ollSet, pllSet],
-  cases: [...f2lStandardCases, ...ollCases, ...pllCases],
-  memberships: [...f2lStandardMemberships, ...ollMemberships, ...pllMemberships],
+  sets: [f2lStandardSet, twoLookOllSet, ollSet, twoLookPllSet, pllSet],
+  cases: [...f2lStandardCases, ...ollCases, ...pllCases, ...twoLookOllCases, ...twoLookPllCases],
+  memberships: [
+    ...f2lStandardMemberships,
+    ...ollMemberships,
+    ...pllMemberships,
+    ...twoLookOllMemberships,
+    ...twoLookPllMemberships
+  ],
   tags
 };

@@ -4,9 +4,13 @@
   import { catalog, getPhase, setsForPhase, casesInSet } from '$lib/domain';
   import { personal } from '$lib/personal.svelte';
 
-  // CFOP phases in solve order, each with its sets.
+  // CFOP phases in solve order, each with its sets. Cross is intuitive (no
+  // algorithm sets), so it's omitted from the algorithms overview.
   const method = catalog.methods[0];
-  const phases = method.phaseIds.map((id) => getPhase(id)).filter((p) => p !== undefined);
+  const phases = method.phaseIds
+    .map((id) => getPhase(id))
+    .filter((p) => p !== undefined)
+    .filter((p) => p.id !== 'cross');
 </script>
 
 <svelte:head><title>Algorithms · Cubedrill</title></svelte:head>

@@ -165,7 +165,7 @@
   );
 
   // Per-row CaseDiagram refs so the row's Play/Reset controls can drive the cube.
-  const diagrams: Record<string, CaseDiagram> = {};
+  const diagrams: Record<string, CaseDiagram> = $state({});
 
   // List-mode view shortcuts mirroring the trainer's (which owns these in train
   // mode via its own handler). Skipped while typing or with a modifier held.

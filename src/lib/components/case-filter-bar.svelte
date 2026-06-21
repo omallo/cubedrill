@@ -54,7 +54,7 @@
         aria-pressed={active}
         onclick={() => ontoggleStatus(s)}
         class={cn(
-          'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
+          'inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
           active ? activeClass(s) : 'border-border text-muted-foreground hover:bg-surface-muted'
         )}
       >
@@ -69,7 +69,7 @@
       value={group ?? ''}
       onchange={(e) => onsetGroup(e.currentTarget.value || null)}
       aria-label="Filter by group"
-      class="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-foreground focus:border-brand-500 focus:ring-brand-500"
+      class="cursor-pointer rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-foreground focus:border-brand-500 focus:ring-brand-500"
     >
       <option value="">All groups</option>
       {#each groups as g (g.id)}
@@ -84,7 +84,7 @@
       <button
         type="button"
         onclick={onclear}
-        class="inline-flex items-center gap-1 rounded-md px-1.5 py-1 transition-colors hover:text-foreground"
+        class="inline-flex cursor-pointer items-center gap-1 rounded-md px-1.5 py-1 transition-colors hover:text-foreground"
       >
         <X size={14} /> Clear
       </button>

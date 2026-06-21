@@ -43,7 +43,7 @@
   onclick={oncycle}
   title="Click to change learning status"
   class={cn(
-    'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
+    'inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
     meta.chip,
     className
   )}

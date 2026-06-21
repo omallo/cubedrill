@@ -194,7 +194,7 @@
 
   const toggleClass = (active: boolean) =>
     cn(
-      'inline-flex h-8 w-8 items-center justify-center rounded-lg border text-muted-foreground transition-colors',
+      'inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border text-muted-foreground transition-colors',
       active
         ? 'border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-700 dark:bg-brand-500/10 dark:text-brand-300'
         : 'border-border hover:bg-accent'

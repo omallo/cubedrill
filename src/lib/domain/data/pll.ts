@@ -11,18 +11,15 @@ export const pllSet: AlgorithmSet = {
   groups: [
     {
       id: 'edges-only',
-      name: 'Edges Only',
-      order: 0
+      name: 'Edges Only'
     },
     {
       id: 'adjacent-corner-swap',
-      name: 'Adjacent Corner Swap',
-      order: 1
+      name: 'Adjacent Corner Swap'
     },
     {
       id: 'diagonal-corner-swap',
-      name: 'Diagonal Corner Swap',
-      order: 2
+      name: 'Diagonal Corner Swap'
     }
   ]
 };

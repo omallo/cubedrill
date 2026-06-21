@@ -12,78 +12,63 @@ export const ollSet: AlgorithmSet = {
   groups: [
     {
       id: 'dot',
-      name: 'Dot',
-      order: 0
+      name: 'Dot'
     },
     {
       id: 'square-shape',
-      name: 'Square Shape',
-      order: 1
+      name: 'Square Shape'
     },
     {
       id: 'small-lightning-bolt',
-      name: 'Small Lightning Bolt',
-      order: 2
+      name: 'Small Lightning Bolt'
     },
     {
       id: 'fish-shape',
-      name: 'Fish Shape',
-      order: 3
+      name: 'Fish Shape'
     },
     {
       id: 'knight-move-shape',
-      name: 'Knight Move Shape',
-      order: 4
+      name: 'Knight Move Shape'
     },
     {
       id: 'cross',
-      name: 'Cross',
-      order: 5
+      name: 'Cross'
     },
     {
       id: 'corners-oriented',
-      name: 'Corners Oriented',
-      order: 6
+      name: 'Corners Oriented'
     },
     {
       id: 'awkward-shape',
-      name: 'Awkward Shape',
-      order: 7
+      name: 'Awkward Shape'
     },
     {
       id: 'p-shape',
-      name: 'P Shape',
-      order: 8
+      name: 'P Shape'
     },
     {
       id: 't-shape',
-      name: 'T Shape',
-      order: 9
+      name: 'T Shape'
     },
     {
       id: 'c-shape',
-      name: 'C Shape',
-      order: 10
+      name: 'C Shape'
     },
     {
       id: 'w-shape',
-      name: 'W Shape',
-      order: 11
+      name: 'W Shape'
     },
     {
       id: 'big-lightning-bolt',
-      name: 'Big Lightning Bolt',
-      order: 12
+      name: 'Big Lightning Bolt'
     },
     {
       id: 'small-l-shape',
-      name: 'Small L Shape',
-      order: 13
+      name: 'Small L Shape'
     },
     {
       id: 'i-shape',
-      name: 'I Shape',
-      order: 14
+      name: 'I Shape'
     }
   ]
 };
@@ -93,7 +78,6 @@ export const ollCases: Case[] = [
     id: 'oll-1',
     phaseId: 'oll',
     name: 'OLL 1',
-    number: 1,
     prob: 2,
     algorithms: [
       {
@@ -107,7 +91,6 @@ export const ollCases: Case[] = [
     id: 'oll-2',
     phaseId: 'oll',
     name: 'OLL 2',
-    number: 2,
     prob: 4,
     algorithms: [
       {
@@ -129,7 +112,6 @@ export const ollCases: Case[] = [
     id: 'oll-3',
     phaseId: 'oll',
     name: 'OLL 3',
-    number: 3,
     prob: 4,
     algorithms: [
       {
@@ -151,7 +133,6 @@ export const ollCases: Case[] = [
     id: 'oll-4',
     phaseId: 'oll',
     name: 'OLL 4',
-    number: 4,
     prob: 4,
     algorithms: [
       {
@@ -173,7 +154,6 @@ export const ollCases: Case[] = [
     id: 'oll-5',
     phaseId: 'oll',
     name: 'OLL 5',
-    number: 5,
     prob: 4,
     algorithms: [
       {
@@ -191,7 +171,6 @@ export const ollCases: Case[] = [
     id: 'oll-6',
     phaseId: 'oll',
     name: 'OLL 6',
-    number: 6,
     prob: 4,
     algorithms: [
       {
@@ -205,7 +184,6 @@ export const ollCases: Case[] = [
     id: 'oll-7',
     phaseId: 'oll',
     name: 'OLL 7',
-    number: 7,
     prob: 4,
     algorithms: [
       {
@@ -219,7 +197,6 @@ export const ollCases: Case[] = [
     id: 'oll-8',
     phaseId: 'oll',
     name: 'OLL 8',
-    number: 8,
     prob: 4,
     algorithms: [
       {
@@ -241,7 +218,6 @@ export const ollCases: Case[] = [
     id: 'oll-9',
     phaseId: 'oll',
     name: 'OLL 9',
-    number: 9,
     prob: 4,
     algorithms: [
       {
@@ -255,7 +231,6 @@ export const ollCases: Case[] = [
     id: 'oll-10',
     phaseId: 'oll',
     name: 'OLL 10',
-    number: 10,
     prob: 4,
     algorithms: [
       {
@@ -273,7 +248,6 @@ export const ollCases: Case[] = [
     id: 'oll-11',
     phaseId: 'oll',
     name: 'OLL 11',
-    number: 11,
     prob: 4,
     algorithms: [
       {
@@ -291,7 +265,6 @@ export const ollCases: Case[] = [
     id: 'oll-12',
     phaseId: 'oll',
     name: 'OLL 12',
-    number: 12,
     prob: 4,
     algorithms: [
       {
@@ -305,7 +278,6 @@ export const ollCases: Case[] = [
     id: 'oll-13',
     phaseId: 'oll',
     name: 'OLL 13',
-    number: 13,
     prob: 4,
     algorithms: [
       {
@@ -323,7 +295,6 @@ export const ollCases: Case[] = [
     id: 'oll-14',
     phaseId: 'oll',
     name: 'OLL 14',
-    number: 14,
     prob: 4,
     algorithms: [
       {
@@ -337,7 +308,6 @@ export const ollCases: Case[] = [
     id: 'oll-15',
     phaseId: 'oll',
     name: 'OLL 15',
-    number: 15,
     prob: 4,
     algorithms: [
       {
@@ -355,7 +325,6 @@ export const ollCases: Case[] = [
     id: 'oll-16',
     phaseId: 'oll',
     name: 'OLL 16',
-    number: 16,
     prob: 4,
     algorithms: [
       {
@@ -369,7 +338,6 @@ export const ollCases: Case[] = [
     id: 'oll-17',
     phaseId: 'oll',
     name: 'OLL 17',
-    number: 17,
     prob: 4,
     algorithms: [
       {
@@ -387,7 +355,6 @@ export const ollCases: Case[] = [
     id: 'oll-18',
     phaseId: 'oll',
     name: 'OLL 18',
-    number: 18,
     prob: 4,
     algorithms: [
       {
@@ -405,7 +372,6 @@ export const ollCases: Case[] = [
     id: 'oll-19',
     phaseId: 'oll',
     name: 'OLL 19',
-    number: 19,
     prob: 4,
     algorithms: [
       {
@@ -419,7 +385,6 @@ export const ollCases: Case[] = [
     id: 'oll-20',
     phaseId: 'oll',
     name: 'OLL 20',
-    number: 20,
     prob: 1,
     algorithms: [
       {
@@ -437,7 +402,6 @@ export const ollCases: Case[] = [
     id: 'oll-21',
     phaseId: 'oll',
     name: 'OLL 21',
-    number: 21,
     prob: 2,
     algorithms: [
       {
@@ -455,7 +419,6 @@ export const ollCases: Case[] = [
     id: 'oll-22',
     phaseId: 'oll',
     name: 'OLL 22',
-    number: 22,
     prob: 4,
     algorithms: [
       {
@@ -469,7 +432,6 @@ export const ollCases: Case[] = [
     id: 'oll-23',
     phaseId: 'oll',
     name: 'OLL 23',
-    number: 23,
     prob: 4,
     algorithms: [
       {
@@ -487,7 +449,6 @@ export const ollCases: Case[] = [
     id: 'oll-24',
     phaseId: 'oll',
     name: 'OLL 24',
-    number: 24,
     prob: 4,
     algorithms: [
       {
@@ -505,7 +466,6 @@ export const ollCases: Case[] = [
     id: 'oll-25',
     phaseId: 'oll',
     name: 'OLL 25',
-    number: 25,
     prob: 4,
     algorithms: [
       {
@@ -523,7 +483,6 @@ export const ollCases: Case[] = [
     id: 'oll-26',
     phaseId: 'oll',
     name: 'OLL 26',
-    number: 26,
     prob: 4,
     algorithms: [
       {
@@ -541,7 +500,6 @@ export const ollCases: Case[] = [
     id: 'oll-27',
     phaseId: 'oll',
     name: 'OLL 27',
-    number: 27,
     prob: 4,
     algorithms: [
       {
@@ -559,7 +517,6 @@ export const ollCases: Case[] = [
     id: 'oll-28',
     phaseId: 'oll',
     name: 'OLL 28',
-    number: 28,
     prob: 4,
     algorithms: [
       {
@@ -573,7 +530,6 @@ export const ollCases: Case[] = [
     id: 'oll-29',
     phaseId: 'oll',
     name: 'OLL 29',
-    number: 29,
     prob: 4,
     algorithms: [
       {
@@ -587,7 +543,6 @@ export const ollCases: Case[] = [
     id: 'oll-30',
     phaseId: 'oll',
     name: 'OLL 30',
-    number: 30,
     prob: 4,
     algorithms: [
       {
@@ -605,7 +560,6 @@ export const ollCases: Case[] = [
     id: 'oll-31',
     phaseId: 'oll',
     name: 'OLL 31',
-    number: 31,
     prob: 4,
     algorithms: [
       {
@@ -619,7 +573,6 @@ export const ollCases: Case[] = [
     id: 'oll-32',
     phaseId: 'oll',
     name: 'OLL 32',
-    number: 32,
     prob: 4,
     algorithms: [
       {
@@ -637,7 +590,6 @@ export const ollCases: Case[] = [
     id: 'oll-33',
     phaseId: 'oll',
     name: 'OLL 33',
-    number: 33,
     prob: 4,
     algorithms: [
       {
@@ -651,7 +603,6 @@ export const ollCases: Case[] = [
     id: 'oll-34',
     phaseId: 'oll',
     name: 'OLL 34',
-    number: 34,
     prob: 4,
     algorithms: [
       {
@@ -669,7 +620,6 @@ export const ollCases: Case[] = [
     id: 'oll-35',
     phaseId: 'oll',
     name: 'OLL 35',
-    number: 35,
     prob: 4,
     algorithms: [
       {
@@ -683,7 +633,6 @@ export const ollCases: Case[] = [
     id: 'oll-36',
     phaseId: 'oll',
     name: 'OLL 36',
-    number: 36,
     prob: 4,
     algorithms: [
       {
@@ -701,7 +650,6 @@ export const ollCases: Case[] = [
     id: 'oll-37',
     phaseId: 'oll',
     name: 'OLL 37',
-    number: 37,
     prob: 4,
     algorithms: [
       {
@@ -719,7 +667,6 @@ export const ollCases: Case[] = [
     id: 'oll-38',
     phaseId: 'oll',
     name: 'OLL 38',
-    number: 38,
     prob: 4,
     algorithms: [
       {
@@ -733,7 +680,6 @@ export const ollCases: Case[] = [
     id: 'oll-39',
     phaseId: 'oll',
     name: 'OLL 39',
-    number: 39,
     prob: 4,
     algorithms: [
       {
@@ -751,7 +697,6 @@ export const ollCases: Case[] = [
     id: 'oll-40',
     phaseId: 'oll',
     name: 'OLL 40',
-    number: 40,
     prob: 4,
     algorithms: [
       {
@@ -765,7 +710,6 @@ export const ollCases: Case[] = [
     id: 'oll-41',
     phaseId: 'oll',
     name: 'OLL 41',
-    number: 41,
     prob: 4,
     algorithms: [
       {
@@ -779,7 +723,6 @@ export const ollCases: Case[] = [
     id: 'oll-42',
     phaseId: 'oll',
     name: 'OLL 42',
-    number: 42,
     prob: 4,
     algorithms: [
       {
@@ -793,7 +736,6 @@ export const ollCases: Case[] = [
     id: 'oll-43',
     phaseId: 'oll',
     name: 'OLL 43',
-    number: 43,
     prob: 4,
     algorithms: [
       {
@@ -811,7 +753,6 @@ export const ollCases: Case[] = [
     id: 'oll-44',
     phaseId: 'oll',
     name: 'OLL 44',
-    number: 44,
     prob: 4,
     algorithms: [
       {
@@ -829,7 +770,6 @@ export const ollCases: Case[] = [
     id: 'oll-45',
     phaseId: 'oll',
     name: 'OLL 45',
-    number: 45,
     prob: 4,
     algorithms: [
       {
@@ -843,7 +783,6 @@ export const ollCases: Case[] = [
     id: 'oll-46',
     phaseId: 'oll',
     name: 'OLL 46',
-    number: 46,
     prob: 4,
     algorithms: [
       {
@@ -857,7 +796,6 @@ export const ollCases: Case[] = [
     id: 'oll-47',
     phaseId: 'oll',
     name: 'OLL 47',
-    number: 47,
     prob: 4,
     algorithms: [
       {
@@ -879,7 +817,6 @@ export const ollCases: Case[] = [
     id: 'oll-48',
     phaseId: 'oll',
     name: 'OLL 48',
-    number: 48,
     prob: 4,
     algorithms: [
       {
@@ -893,7 +830,6 @@ export const ollCases: Case[] = [
     id: 'oll-49',
     phaseId: 'oll',
     name: 'OLL 49',
-    number: 49,
     prob: 4,
     algorithms: [
       {
@@ -907,7 +843,6 @@ export const ollCases: Case[] = [
     id: 'oll-50',
     phaseId: 'oll',
     name: 'OLL 50',
-    number: 50,
     prob: 4,
     algorithms: [
       {
@@ -921,7 +856,6 @@ export const ollCases: Case[] = [
     id: 'oll-51',
     phaseId: 'oll',
     name: 'OLL 51',
-    number: 51,
     prob: 4,
     algorithms: [
       {
@@ -939,7 +873,6 @@ export const ollCases: Case[] = [
     id: 'oll-52',
     phaseId: 'oll',
     name: 'OLL 52',
-    number: 52,
     prob: 4,
     algorithms: [
       {
@@ -961,7 +894,6 @@ export const ollCases: Case[] = [
     id: 'oll-53',
     phaseId: 'oll',
     name: 'OLL 53',
-    number: 53,
     prob: 4,
     algorithms: [
       {
@@ -983,7 +915,6 @@ export const ollCases: Case[] = [
     id: 'oll-54',
     phaseId: 'oll',
     name: 'OLL 54',
-    number: 54,
     prob: 4,
     algorithms: [
       {
@@ -1001,7 +932,6 @@ export const ollCases: Case[] = [
     id: 'oll-55',
     phaseId: 'oll',
     name: 'OLL 55',
-    number: 55,
     prob: 2,
     algorithms: [
       {
@@ -1019,7 +949,6 @@ export const ollCases: Case[] = [
     id: 'oll-56',
     phaseId: 'oll',
     name: 'OLL 56',
-    number: 56,
     prob: 2,
     algorithms: [
       {
@@ -1041,7 +970,6 @@ export const ollCases: Case[] = [
     id: 'oll-57',
     phaseId: 'oll',
     name: 'OLL 57',
-    number: 57,
     prob: 2,
     algorithms: [
       {

@@ -66,7 +66,7 @@ export function caseGroupsInSet(setId: string): CaseGroup[] {
 export function casesInSet(setId: string): CaseInSet[] {
   const set = setById.get(setId);
   if (!set) return [];
-  const groupOrder = new Map(set.groups.map((g) => [g.id, g.order]));
+  const groupOrder = new Map(set.groups.map((g, i) => [g.id, i]));
 
   return catalog.memberships
     .filter((m) => m.setId === setId)

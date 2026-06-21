@@ -12,8 +12,8 @@ export const twoLookOllSet: AlgorithmSet = {
   tier: 'beginner',
   order: 0,
   groups: [
-    { id: 'edges', name: 'Orient Edges', order: 0 },
-    { id: 'corners', name: 'Orient Corners', order: 1 }
+    { id: 'edges', name: 'Orient Edges' },
+    { id: 'corners', name: 'Orient Corners' }
   ]
 };
 

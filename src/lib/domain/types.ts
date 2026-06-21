@@ -77,11 +77,11 @@ export type SetId = string; // 'oll-full' | 'oll-2look' | 'pll-full' | 'f2l-stan
 /** A loose tier label, useful for ordering the learning path. */
 export type SetTier = 'beginner' | 'standard' | 'advanced' | 'expert' | 'full';
 
-/** An ordered learning group within a set (e.g. Full OLL → "Dot"). */
+/** A learning group within a set (e.g. Full OLL → "Dot"). Display order follows
+ *  the group's position in the set's `groups` array. */
 export interface SetGroup {
   id: string; // unique within the set, e.g. 'dot'
   name: string; // 'Dot'
-  order: number;
   description?: string;
 }
 
@@ -147,8 +147,6 @@ export interface Case {
   name: string;
   /** Common nickname, e.g. 'Sune', 'T-Perm'. */
   nickname?: string;
-  /** Numeric id where it exists (OLL/PLL/F2L numbering). */
-  number?: number;
   /** Case-level tags (shape, recognition group, ...). */
   tags?: TagId[];
   /** Relative occurrence frequency (sums vary by phase; used for weighting). */

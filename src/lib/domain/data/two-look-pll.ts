@@ -12,8 +12,8 @@ export const twoLookPllSet: AlgorithmSet = {
   tier: 'beginner',
   order: 0,
   groups: [
-    { id: 'corners', name: 'Permute Corners', order: 0 },
-    { id: 'edges', name: 'Permute Edges', order: 1 }
+    { id: 'corners', name: 'Permute Corners' },
+    { id: 'edges', name: 'Permute Edges' }
   ]
 };
 

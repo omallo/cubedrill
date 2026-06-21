@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowLeft, List, Dumbbell, Play, RotateCcw } from 'lucide-svelte';
+  import { ArrowLeft, List, Dumbbell, Play, RotateCcw, FlipHorizontal2 } from 'lucide-svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
   import { PageHeader, Card, LearningStatusControl, CaseFilterBar } from '$lib/components';
@@ -10,7 +10,7 @@
     getSet,
     caseGroupsInSet,
     primaryAlgorithm,
-    authoredSlots,
+    slotsForCase,
     type CaseInSet,
     type F2LSlot,
     type LearningStatus,
@@ -44,28 +44,29 @@
   const groupFilter = $derived(page.url.searchParams.get('group'));
 
   // --- Slot dimension (F2L) ------------------------------------------------
-  // F2L cases are learned per slot. `setSlots` is the set's authored slots in
-  // canonical order ([] for OLL/PLL, [FR, BR] for F2L). The slot selector only
-  // shows when there's a real choice. ?slot picks the displayed/trained slot;
-  // train mode also offers 'both' (drill every authored slot of each case).
+  // F2L cases are learned per slot. `setSlots` is the set's slots in canonical
+  // order ([] for OLL/PLL, [FR, FL, BR, BL] for F2L; FL/BL and missing BR are
+  // mirror-derived). The slot selector only shows when there's a real choice.
+  // ?slot picks the displayed/trained slot; train mode also offers 'all' (drill
+  // every slot of each case).
   const SLOT_ORDER: F2LSlot[] = ['FR', 'FL', 'BR', 'BL'];
   const setSlots = $derived(
     SLOT_ORDER.filter((s) =>
-      allGroups.some((g) => g.cases.some((c) => authoredSlots(c.case).includes(s)))
+      allGroups.some((g) => g.cases.some((c) => slotsForCase(c.case).includes(s)))
     )
   );
-  type SlotChoice = F2LSlot | 'both';
+  type SlotChoice = F2LSlot | 'all';
   const slotChoices = $derived<SlotChoice[]>(
-    setSlots.length <= 1 ? [] : mode === 'train' ? [...setSlots, 'both'] : setSlots
+    setSlots.length <= 1 ? [] : mode === 'train' ? [...setSlots, 'all'] : setSlots
   );
   const selectedSlot = $derived.by<SlotChoice | undefined>(() => {
     if (setSlots.length <= 1) return setSlots[0];
     const raw = page.url.searchParams.get('slot');
     return (slotChoices as string[]).includes(raw ?? '') ? (raw as SlotChoice) : setSlots[0];
   });
-  // The concrete slot shown in list rows ('both' has no single view → base slot).
+  // The concrete slot shown in list rows ('all' has no single view → base slot).
   const listSlot = $derived<F2LSlot | undefined>(
-    selectedSlot === 'both' ? setSlots[0] : (selectedSlot as F2LSlot | undefined)
+    selectedSlot === 'all' ? setSlots[0] : (selectedSlot as F2LSlot | undefined)
   );
 
   function setSlot(s: SlotChoice) {
@@ -75,15 +76,15 @@
   /** The slot to render/track for a case given the wanted view: the wanted slot
    *  if the case has it, else the case's base slot (undefined for OLL/PLL). */
   function slotFor(c: CaseInSet, want: F2LSlot | undefined): F2LSlot | undefined {
-    const slots = authoredSlots(c.case);
+    const slots = slotsForCase(c.case);
     if (slots.length === 0) return undefined;
     return want && slots.includes(want) ? want : slots[0];
   }
 
-  /** Status used for filtering & the list chip: the displayed slot, except a
-   *  'both' training session filters on the rolled-up case status. */
+  /** Status used for filtering & the list chip: the displayed slot, except an
+   *  'all' training session filters on the rolled-up case status. */
   function filterStatusOf(c: CaseInSet): LearningStatus {
-    if (mode === 'train' && selectedSlot === 'both') return personal.caseStatus(c.case.id);
+    if (mode === 'train' && selectedSlot === 'all') return personal.caseStatus(c.case.id);
     return personal.status(c.case.id, slotFor(c, listSlot));
   }
 
@@ -134,14 +135,14 @@
   );
   const shownCount = $derived(filteredGroups.reduce((n, g) => n + g.cases.length, 0));
 
-  // The trainer drills exactly what the list shows, in the same order. A 'both'
-  // session expands each case into one card per authored slot; otherwise each
-  // case is a single card on the displayed slot.
+  // The trainer drills exactly what the list shows, in the same order. An 'all'
+  // session expands each case into one card per slot; otherwise each case is a
+  // single card on the displayed slot.
   const pool = $derived.by<(CaseInSet & { slot?: F2LSlot })[]>(() => {
     const cases = filteredGroups.flatMap((g) => g.cases);
-    if (selectedSlot === 'both') {
+    if (selectedSlot === 'all') {
       return cases.flatMap((c) => {
-        const slots = authoredSlots(c.case);
+        const slots = slotsForCase(c.case);
         return slots.length ? slots.map((slot) => ({ ...c, slot })) : [{ ...c }];
       });
     }
@@ -192,10 +193,10 @@
             <button
               type="button"
               class={modeBtn(selectedSlot === s)}
-              title={s === 'both' ? 'Drill every slot' : `Slot ${s}`}
+              title={s === 'all' ? 'Drill every slot' : `Slot ${s}`}
               onclick={() => setSlot(s)}
             >
-              {s === 'both' ? 'Both' : s}
+              {s === 'all' ? 'All' : s}
             </button>
           {/each}
         </div>
@@ -272,6 +273,14 @@
                         class="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] font-medium text-muted-foreground"
                         title={`Slot ${dslot}`}>{dslot}</span
                       >
+                    {/if}
+                    {#if alg?.derived}
+                      <span
+                        class="inline-flex items-center gap-0.5 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"
+                        title="Mirror-derived algorithm"
+                      >
+                        <FlipHorizontal2 size={11} /> mirror
+                      </span>
                     {/if}
                     {#if entry.case.nickname}
                       <span class="text-sm text-muted-foreground">{entry.case.nickname}</span>

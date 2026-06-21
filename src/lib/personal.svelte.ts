@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import {
-  authoredSlots,
+  slotsForCase,
   getCase,
   type CaseId,
   type F2LSlot,
@@ -95,7 +95,7 @@ class PersonalStore {
    */
   caseStatus(caseId: CaseId): LearningStatus {
     const c = getCase(caseId);
-    const slots = c ? authoredSlots(c) : [];
+    const slots = c ? slotsForCase(c) : [];
     if (slots.length === 0) return this.status(caseId);
     return this.status(caseId, slots[0]);
   }

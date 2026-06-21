@@ -60,9 +60,10 @@ export function primaryAlgorithm(c: Case, slot?: F2LSlot): Algorithm | undefined
   return algs.find((a) => a.primary) ?? algs[0];
 }
 
-/** Slots a case has an authored algorithm for, in canonical order (FR, FL, BR, BL). */
+/** Slots a case has an algorithm for (authored or mirror-derived), in canonical
+ *  order (FR, FL, BR, BL). Empty for unsliced phases (OLL/PLL). */
 const SLOT_ORDER: F2LSlot[] = ['FR', 'FL', 'BR', 'BL'];
-export function authoredSlots(c: Case): F2LSlot[] {
+export function slotsForCase(c: Case): F2LSlot[] {
   const present = new Set(c.algorithms.map((a) => a.slot).filter((s): s is F2LSlot => !!s));
   return SLOT_ORDER.filter((s) => present.has(s));
 }

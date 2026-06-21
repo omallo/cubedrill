@@ -1,4 +1,5 @@
 import type { Catalog, Method, Phase, Tag } from './types';
+import { withDerivedSlots } from './f2l-slots';
 import { f2lStandardSet, f2lStandardCases, f2lStandardMemberships } from './data/f2l';
 import { ollSet, ollCases, ollMemberships } from './data/oll';
 import { pllSet, pllCases, pllMemberships } from './data/pll';
@@ -77,7 +78,13 @@ export const catalog: Catalog = {
   methods: [cfop],
   phases,
   sets: [f2lStandardSet, twoLookOllSet, ollSet, twoLookPllSet, pllSet],
-  cases: [...f2lStandardCases, ...ollCases, ...pllCases, ...twoLookOllCases, ...twoLookPllCases],
+  cases: [
+    ...f2lStandardCases.map(withDerivedSlots),
+    ...ollCases,
+    ...pllCases,
+    ...twoLookOllCases,
+    ...twoLookPllCases
+  ],
   memberships: [
     ...f2lStandardMemberships,
     ...ollMemberships,

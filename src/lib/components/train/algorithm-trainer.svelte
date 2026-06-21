@@ -10,7 +10,8 @@
     ArrowRight,
     Shuffle,
     Lightbulb,
-    Boxes
+    Boxes,
+    FlipHorizontal2
   } from 'lucide-svelte';
   import { Button, Card, LearningStatusControl } from '$lib/components';
   // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
@@ -240,6 +241,14 @@
               class="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] font-medium text-muted-foreground"
               title={`Slot ${current.slot}`}>{current.slot}</span
             >
+          {/if}
+          {#if alg?.derived}
+            <span
+              class="inline-flex items-center gap-0.5 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"
+              title="Mirror-derived algorithm"
+            >
+              <FlipHorizontal2 size={11} /> mirror
+            </span>
           {/if}
           {#if current.case.nickname}
             <span class="text-sm text-muted-foreground">{current.case.nickname}</span>

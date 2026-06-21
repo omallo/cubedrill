@@ -9,7 +9,10 @@
   import {
     getSet,
     caseGroupsInSet,
-    type Algorithm,
+    primaryAlgorithm,
+    authoredSlots,
+    type CaseInSet,
+    type F2LSlot,
     type LearningStatus,
     type SetGroup
   } from '$lib/domain';
@@ -39,6 +42,50 @@
       .filter((s): s is LearningStatus => (VALID_STATUS as string[]).includes(s))
   );
   const groupFilter = $derived(page.url.searchParams.get('group'));
+
+  // --- Slot dimension (F2L) ------------------------------------------------
+  // F2L cases are learned per slot. `setSlots` is the set's authored slots in
+  // canonical order ([] for OLL/PLL, [FR, BR] for F2L). The slot selector only
+  // shows when there's a real choice. ?slot picks the displayed/trained slot;
+  // train mode also offers 'both' (drill every authored slot of each case).
+  const SLOT_ORDER: F2LSlot[] = ['FR', 'FL', 'BR', 'BL'];
+  const setSlots = $derived(
+    SLOT_ORDER.filter((s) =>
+      allGroups.some((g) => g.cases.some((c) => authoredSlots(c.case).includes(s)))
+    )
+  );
+  type SlotChoice = F2LSlot | 'both';
+  const slotChoices = $derived<SlotChoice[]>(
+    setSlots.length <= 1 ? [] : mode === 'train' ? [...setSlots, 'both'] : setSlots
+  );
+  const selectedSlot = $derived.by<SlotChoice | undefined>(() => {
+    if (setSlots.length <= 1) return setSlots[0];
+    const raw = page.url.searchParams.get('slot');
+    return (slotChoices as string[]).includes(raw ?? '') ? (raw as SlotChoice) : setSlots[0];
+  });
+  // The concrete slot shown in list rows ('both' has no single view → base slot).
+  const listSlot = $derived<F2LSlot | undefined>(
+    selectedSlot === 'both' ? setSlots[0] : (selectedSlot as F2LSlot | undefined)
+  );
+
+  function setSlot(s: SlotChoice) {
+    updateParams((p) => (s === setSlots[0] ? p.delete('slot') : p.set('slot', s)));
+  }
+
+  /** The slot to render/track for a case given the wanted view: the wanted slot
+   *  if the case has it, else the case's base slot (undefined for OLL/PLL). */
+  function slotFor(c: CaseInSet, want: F2LSlot | undefined): F2LSlot | undefined {
+    const slots = authoredSlots(c.case);
+    if (slots.length === 0) return undefined;
+    return want && slots.includes(want) ? want : slots[0];
+  }
+
+  /** Status used for filtering & the list chip: the displayed slot, except a
+   *  'both' training session filters on the rolled-up case status. */
+  function filterStatusOf(c: CaseInSet): LearningStatus {
+    if (mode === 'train' && selectedSlot === 'both') return personal.caseStatus(c.case.id);
+    return personal.status(c.case.id, slotFor(c, listSlot));
+  }
 
   function updateParams(mutate: (p: URLSearchParams) => void) {
     const params = new URLSearchParams(page.url.searchParams);
@@ -73,28 +120,38 @@
     });
   }
 
-  // Apply filters. personal.status() is read here, so cycling a case re-filters live.
+  // Apply filters. filterStatusOf() reads personal state, so cycling re-filters live.
   const filteredGroups = $derived(
     allGroups
       .filter((section) => !groupFilter || section.group?.id === groupFilter)
       .map((section) => ({
         ...section,
         cases: section.cases.filter(
-          (c) => statusFilter.length === 0 || statusFilter.includes(personal.status(c.case.id))
+          (c) => statusFilter.length === 0 || statusFilter.includes(filterStatusOf(c))
         )
       }))
       .filter((section) => section.cases.length > 0)
   );
   const shownCount = $derived(filteredGroups.reduce((n, g) => n + g.cases.length, 0));
 
-  // The trainer drills exactly what the list shows, in the same order.
-  const pool = $derived(filteredGroups.flatMap((g) => g.cases));
-  // Remount the trainer when the deck's identity changes (set or filters) so it
-  // re-snapshots; status is intentionally excluded (cycling shouldn't resize it).
-  const sessionKey = $derived(`${set?.id}|${statusFilter.join(',')}|${groupFilter ?? ''}`);
-
-  const primaryAlg = (algorithms: Algorithm[]): Algorithm | undefined =>
-    algorithms.find((a) => a.primary) ?? algorithms[0];
+  // The trainer drills exactly what the list shows, in the same order. A 'both'
+  // session expands each case into one card per authored slot; otherwise each
+  // case is a single card on the displayed slot.
+  const pool = $derived.by<(CaseInSet & { slot?: F2LSlot })[]>(() => {
+    const cases = filteredGroups.flatMap((g) => g.cases);
+    if (selectedSlot === 'both') {
+      return cases.flatMap((c) => {
+        const slots = authoredSlots(c.case);
+        return slots.length ? slots.map((slot) => ({ ...c, slot })) : [{ ...c }];
+      });
+    }
+    return cases.map((c) => ({ ...c, slot: slotFor(c, listSlot) }));
+  });
+  // Remount the trainer when the deck's identity changes (set, slot or filters)
+  // so it re-snapshots; status is intentionally excluded (cycling shouldn't resize it).
+  const sessionKey = $derived(
+    `${set?.id}|${selectedSlot ?? ''}|${statusFilter.join(',')}|${groupFilter ?? ''}`
+  );
 
   // Per-row CaseDiagram refs so the row's Play/Reset controls can drive the cube.
   const diagrams: Record<string, CaseDiagram> = {};
@@ -129,6 +186,20 @@
         <span class="font-semibold text-amber-600 dark:text-amber-400">{learningCount}</span>
         learning
       </span>
+      {#if slotChoices.length > 0}
+        <div class="inline-flex rounded-lg border border-border bg-surface p-0.5">
+          {#each slotChoices as s (s)}
+            <button
+              type="button"
+              class={modeBtn(selectedSlot === s)}
+              title={s === 'both' ? 'Drill every slot' : `Slot ${s}`}
+              onclick={() => setSlot(s)}
+            >
+              {s === 'both' ? 'Both' : s}
+            </button>
+          {/each}
+        </div>
+      {/if}
       <div class="inline-flex rounded-lg border border-border bg-surface p-0.5">
         <button type="button" class={modeBtn(mode === 'list')} onclick={() => setMode('list')}>
           <List size={15} /> List
@@ -184,7 +255,8 @@
 
           <Card class="divide-y divide-border">
             {#each section.cases as entry (entry.case.id)}
-              {@const alg = primaryAlg(entry.case.algorithms)}
+              {@const dslot = slotFor(entry, listSlot)}
+              {@const alg = primaryAlgorithm(entry.case, dslot)}
               <div class="flex items-center gap-4 p-4">
                 <CaseDiagram
                   moves={alg?.moves ?? ''}
@@ -195,6 +267,12 @@
                 <div class="min-w-0 flex-1">
                   <div class="flex items-baseline gap-2">
                     <span class="font-semibold text-foreground">{entry.label}</span>
+                    {#if dslot}
+                      <span
+                        class="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] font-medium text-muted-foreground"
+                        title={`Slot ${dslot}`}>{dslot}</span
+                      >
+                    {/if}
                     {#if entry.case.nickname}
                       <span class="text-sm text-muted-foreground">{entry.case.nickname}</span>
                     {/if}
@@ -224,8 +302,8 @@
                   </button>
                 </div>
                 <LearningStatusControl
-                  status={personal.status(entry.case.id)}
-                  oncycle={() => personal.cycle(entry.case.id)}
+                  status={personal.status(entry.case.id, dslot)}
+                  oncycle={() => personal.cycle(entry.case.id, dslot)}
                   class="shrink-0"
                 />
               </div>

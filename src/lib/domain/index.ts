@@ -7,7 +7,18 @@ export * from './types';
 export { catalog } from './catalog';
 
 import { catalog } from './catalog';
-import type { AlgorithmSet, Case, Phase, SetGroup, SetMembership } from './types';
+import type {
+  Algorithm,
+  AlgorithmSet,
+  Case,
+  F2LSlot,
+  Phase,
+  SetGroup,
+  SetMembership
+} from './types';
+
+/** F2L's canonical base slot — the default when a slot isn't specified. */
+const DEFAULT_SLOT: F2LSlot = 'FR';
 
 const phaseById = new Map(catalog.phases.map((p) => [p.id, p]));
 const setById = new Map(catalog.sets.map((s) => [s.id, s]));
@@ -23,6 +34,37 @@ export function getSet(id: string): AlgorithmSet | undefined {
 
 export function getCase(id: string): Case | undefined {
   return caseById.get(id);
+}
+
+/**
+ * The recommended algorithm for a case, resolving `primary` per slot.
+ *
+ * - OLL/PLL (no slots): returns the case's primary, else its first alg.
+ * - F2L (sliced): with a `slot`, returns that slot's primary (else its first
+ *   authored alg). Without a slot, falls back to the canonical `FR` slot. If the
+ *   requested slot isn't authored yet (e.g. a missing BR, or not-yet-derived
+ *   FL/BL), falls back to the case's overall primary so callers always get
+ *   something renderable — check the returned `slot` if that matters.
+ */
+export function primaryAlgorithm(c: Case, slot?: F2LSlot): Algorithm | undefined {
+  const algs = c.algorithms;
+  if (algs.length === 0) return undefined;
+
+  const sliced = algs.some((a) => a.slot);
+  const wantSlot = slot ?? (sliced ? DEFAULT_SLOT : undefined);
+  if (wantSlot) {
+    const inSlot = algs.filter((a) => a.slot === wantSlot);
+    if (inSlot.length) return inSlot.find((a) => a.primary) ?? inSlot[0];
+    // Requested slot not authored — fall through to the overall default.
+  }
+  return algs.find((a) => a.primary) ?? algs[0];
+}
+
+/** Slots a case has an authored algorithm for, in canonical order (FR, FL, BR, BL). */
+const SLOT_ORDER: F2LSlot[] = ['FR', 'FL', 'BR', 'BL'];
+export function authoredSlots(c: Case): F2LSlot[] {
+  const present = new Set(c.algorithms.map((a) => a.slot).filter((s): s is F2LSlot => !!s));
+  return SLOT_ORDER.filter((s) => present.has(s));
 }
 
 /** Sets belonging to a phase, in learning-path order. */

@@ -16,13 +16,23 @@
   // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
   import CubePlayer from '$lib/components/cube/cube-player.svelte';
   import { setupScramble } from '$lib/components/cube/orientation';
-  import { getPhase, type Algorithm, type CaseInSet, type StickeringMask } from '$lib/domain';
+  import {
+    getPhase,
+    primaryAlgorithm,
+    type Algorithm,
+    type CaseInSet,
+    type F2LSlot,
+    type StickeringMask
+  } from '$lib/domain';
   import { personal } from '$lib/personal.svelte';
   import { cn } from '$lib/utils/cn';
 
+  /** A card to drill: a case in a set, plus the F2L slot it targets (if any). */
+  type TrainingCard = CaseInSet & { slot?: F2LSlot };
+
   type Props = {
     /** The training pool, in the order it should be drilled. */
-    pool: CaseInSet[];
+    pool: TrainingCard[];
   };
 
   let { pool }: Props = $props();
@@ -53,7 +63,7 @@
 
   const current = $derived(cases[order[pos]]);
   const alg = $derived<Algorithm | undefined>(
-    current?.case.algorithms.find((a) => a.primary) ?? current?.case.algorithms[0]
+    current ? primaryAlgorithm(current.case, current.slot) : undefined
   );
 
   // Scramble to apply to a solved cube to reach the case — for practising on a
@@ -177,7 +187,7 @@
         if (canToggleViz) viz = viz === '2D' ? '3D' : '2D';
         break;
       case 'm':
-        if (current) personal.cycle(current.case.id);
+        if (current) personal.cycle(current.case.id, current.slot);
         break;
     }
   }
@@ -225,6 +235,12 @@
       {#if stage === 'revealed'}
         <div class="flex items-baseline justify-center gap-2">
           <span class="text-lg font-semibold text-foreground">{current.label}</span>
+          {#if current.slot}
+            <span
+              class="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] font-medium text-muted-foreground"
+              title={`Slot ${current.slot}`}>{current.slot}</span
+            >
+          {/if}
           {#if current.case.nickname}
             <span class="text-sm text-muted-foreground">{current.case.nickname}</span>
           {/if}
@@ -238,8 +254,8 @@
             <RotateCcw size={15} /> Reset
           </Button>
           <LearningStatusControl
-            status={personal.status(current.case.id)}
-            oncycle={() => personal.cycle(current.case.id)}
+            status={personal.status(current.case.id, current.slot)}
+            oncycle={() => personal.cycle(current.case.id, current.slot)}
           />
         </div>
       {:else if stage === 'recognizing'}

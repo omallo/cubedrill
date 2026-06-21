@@ -1,6 +1,8 @@
-// Standard F2L (41 cases). FR is complete and primary; BR is authored where
-// available (30/41) — FL is derived from FR and BL from BR at render time (not
-// stored). Ids follow speedcubedb numbering.
+// Standard F2L (41 cases). Algorithms are authored per slot: FR is complete and
+// primary; BR is authored (and primary for its slot) where available (30/41).
+// FL is derived from FR and BL from BR at render time (not stored). `primary` is
+// per slot here — one recommended FR alg and one recommended BR alg per case.
+// Ids follow speedcubedb numbering.
 import type { AlgorithmSet, Case, SetMembership } from '../types';
 
 export const f2lStandardSet: AlgorithmSet = {
@@ -53,7 +55,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-21/br',
         moves: "y U2' (R U R') U (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -71,7 +74,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-22/br',
         moves: "U2' (R' U' R) U' (R' U R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -89,7 +93,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-19/br',
         moves: "y U (R U2' R') U (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -107,7 +112,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-20/br',
         moves: "U' (R' U2' R) U' (R' U R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -125,7 +131,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-23/br',
         moves: "y U (R U' R') U' (R U' R') U (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -143,7 +150,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-24/br',
         moves: "U (R U R' U R U2' R2') U R",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -161,7 +169,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-17/br',
         moves: "y (R U2' R') U' (R U R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -179,7 +188,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-18/br',
         moves: "(R' U2' R) U (R' U' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -197,7 +207,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-4/br',
         moves: "y (R U R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -215,7 +226,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-3/br',
         moves: "(R' U' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -233,7 +245,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-10/br',
         moves: "y U' (R U R') U (R U R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -251,7 +264,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-9/br',
         moves: "U (R' U' R) U' (R' U' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -269,7 +283,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-12/br',
         moves: "y (R U' R') U (R U' R') U2 (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -287,7 +302,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-11/br',
         moves: "R U2' R2' U' R2 U' R'",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -305,7 +321,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-14/br',
         moves: "y U' (R U' R') U (R U R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -323,7 +340,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-13/br',
         moves: "U (R' U R) U' (R' U' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -341,7 +359,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-2/br',
         moves: "U' (R' U R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -359,7 +378,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-1/br',
         moves: "y U (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -377,7 +397,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-8/br',
         moves: "U (R' U2' R) U (R' U2' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -395,7 +416,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-7/br',
         moves: "y U' (R U2' R') U2 (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -413,7 +435,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-5/br',
         moves: "y U' (R U R') U2 (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -431,7 +454,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-6/br',
         moves: "U (R' U' R) U (R' U2' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -449,7 +473,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-15/br',
         moves: "y (R U R') U2 (R U' R') U (R U' R')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -467,7 +492,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-16/br',
         moves: "(R' U' R) U2' (R' U R) U' (R' U R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -485,7 +511,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-34/br',
         moves: "U (R' U R) U (R' U2' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -503,7 +530,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-33/br',
         moves: "U' (R' U' R) U2' (R' U' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -521,7 +549,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-36/br',
         moves: "U (R' U' R) U' (f R f')",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -539,7 +568,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-35/br',
         moves: "U' (f R f') U (R' U' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -557,7 +587,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-32/br',
         moves: "(U' R' U R) (U' R' U R) (U' R' U R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },
@@ -575,7 +606,8 @@ export const f2lStandardCases: Case[] = [
       {
         id: 'f2l-31/br',
         moves: "(f R' f') (R' U2' R)",
-        slot: 'BR'
+        slot: 'BR',
+        primary: true
       }
     ]
   },

@@ -3,6 +3,8 @@
   import {
     Eye,
     Play,
+    Timer,
+    Box,
     RotateCcw,
     ArrowLeft,
     ArrowRight,
@@ -68,16 +70,23 @@
   });
 
   // --- Recognition / reveal -------------------------------------------------
-  let revealed = $state(false);
+  // Each case runs through three stages: `ready` (the gate — timer parked at 0 so
+  // you can get set, or build the scramble on a normal cube, before timing starts),
+  // `recognizing` (timer running, solution hidden) and `revealed` (solution shown,
+  // timer stopped). Nothing auto-starts: you leave the gate on your own action.
+  let stage = $state<'ready' | 'recognizing' | 'revealed'>('ready');
   let viz = $state<'2D' | '3D'>(phase?.defaultVisualization ?? '3D');
   let hint = $state(false);
+  // Show the setup scramble (for practising on a normal, non-smart cube). Off by
+  // default — recognition uses the on-screen cube as the prompt, not the scramble.
+  let showScramble = $state(false);
   // bind:this on the custom-element-backed CubePlayer doesn't match its class type.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cube = $state<any>(null);
 
   // --- Recognition timer (immediate feedback; not persisted yet) ------------
   let elapsed = $state(0);
-  let running = $state(false);
+  const running = $derived(stage === 'recognizing');
   const seconds = $derived((elapsed / 1000).toFixed(1));
 
   onMount(() => {
@@ -88,18 +97,27 @@
     return () => clearInterval(id);
   });
 
-  /** Begin recognition for the current case: hide the solution, restart the timer. */
+  /** Park on the current case at the ready gate: solution hidden, timer reset and stopped. */
   function startCase() {
-    revealed = false;
+    stage = 'ready';
     elapsed = 0;
-    running = true;
     cube?.reset();
   }
 
+  /** Leave the ready gate and start the recognition timer. */
+  function begin() {
+    if (stage === 'ready') stage = 'recognizing';
+  }
+
   function reveal() {
-    if (revealed) return;
-    revealed = true;
-    running = false;
+    if (stage !== 'revealed') stage = 'revealed';
+  }
+
+  /** Space / Enter: walk the current case through ready → recognizing → revealed → next. */
+  function advance() {
+    if (stage === 'ready') begin();
+    else if (stage === 'recognizing') reveal();
+    else go(1);
   }
 
   function go(delta: number) {
@@ -129,8 +147,7 @@
     switch (e.key) {
       case ' ':
         e.preventDefault();
-        if (revealed) go(1);
-        else reveal();
+        advance();
         break;
       case 'ArrowRight':
         go(1);
@@ -139,7 +156,7 @@
         go(-1);
         break;
       case 'Enter':
-        reveal();
+        advance();
         break;
       case 'p':
         cube?.play();
@@ -149,6 +166,9 @@
         break;
       case 'h':
         hint = !hint;
+        break;
+      case 'c':
+        showScramble = !showScramble;
         break;
       case 's':
         toggleShuffle();
@@ -180,7 +200,7 @@
 {:else if current}
   <div class="mx-auto flex max-w-sm flex-col items-center">
     <div class="mb-4 flex min-h-5 w-full items-center justify-center text-center text-sm">
-      {#if scramble}
+      {#if showScramble && scramble}
         <span class="font-mono break-words text-foreground">{scramble}</span>
       {/if}
     </div>
@@ -194,14 +214,15 @@
         hintFacelets={hint}
       />
       <span
-        class="absolute top-2 left-2 rounded-md bg-surface/80 px-2 py-0.5 font-mono text-xs text-muted-foreground tabular-nums ring-1 ring-border backdrop-blur"
+        class="absolute top-2 left-2 rounded-md bg-surface/80 px-2 py-0.5 font-mono text-xs text-muted-foreground tabular-nums ring-1 ring-border backdrop-blur transition-opacity"
+        class:opacity-50={stage === 'ready'}
       >
         {seconds}s
       </span>
     </div>
 
     <div class="mt-5 min-h-28 w-full text-center">
-      {#if revealed}
+      {#if stage === 'revealed'}
         <div class="flex items-baseline justify-center gap-2">
           <span class="text-lg font-semibold text-foreground">{current.label}</span>
           {#if current.case.nickname}
@@ -221,12 +242,21 @@
             oncycle={() => personal.cycle(current.case.id)}
           />
         </div>
-      {:else}
+      {:else if stage === 'recognizing'}
         <Button variant="primary" onclick={reveal}>
           <Eye size={16} /> Reveal solution
         </Button>
         <p class="mt-3 text-xs text-muted-foreground">
-          Recognize the case and recall the algorithm, then reveal.
+          Recall the algorithm, then reveal to check.
+        </p>
+      {:else}
+        <Button variant="primary" onclick={begin}>
+          <Timer size={16} /> Start
+        </Button>
+        <p class="mt-3 text-xs text-muted-foreground">
+          {showScramble
+            ? 'Apply the scramble to a solved cube, then start when ready.'
+            : 'Recognize the case from the cube, then start to time your recall.'}
         </p>
       {/if}
     </div>
@@ -255,6 +285,15 @@
         >
           <Lightbulb size={15} />
         </button>
+        <button
+          type="button"
+          aria-pressed={showScramble}
+          title="Show setup scramble (c)"
+          onclick={() => (showScramble = !showScramble)}
+          class={toggleClass(showScramble)}
+        >
+          <Box size={15} />
+        </button>
         {#if canToggleViz}
           <button
             type="button"
@@ -275,9 +314,9 @@
     </div>
 
     <p class="mt-6 text-center text-xs text-muted-foreground">
-      <kbd class="font-sans">Space</kbd> reveal / next ·
+      <kbd class="font-sans">Space</kbd> start / reveal / next ·
       <kbd class="font-sans">←</kbd> <kbd class="font-sans">→</kbd> move ·
-      <kbd class="font-sans">p</kbd> play · <kbd class="font-sans">m</kbd> mark
+      <kbd class="font-sans">c</kbd> scramble · <kbd class="font-sans">m</kbd> mark
     </p>
   </div>
 {/if}

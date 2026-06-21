@@ -51,17 +51,21 @@
     cube?.reset();
   }
 
-  // Only mount the (heavy, WebGL-for-3D) player once it scrolls near the viewport.
+  // Mount the (heavy, WebGL-for-3D) player only once it actually overlaps the
+  // viewport — NOT preloaded ahead of it. <twisty-player> lazy-builds its content
+  // via its own one-shot IntersectionObserver that fires on `isIntersecting &&
+  // intersectionRect.height > 0`; if we mount it while still off-screen, cubing
+  // waits, and the later "entered viewport" transition can be coalesced away during
+  // scroll, leaving an empty `.wrapper` (blank cube) until a re-scroll re-fires it.
+  // Mounting only when it's already intersecting means cubing's first observer
+  // delivery builds it immediately, with no off-screen wait to lose.
   onMount(() => {
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          visible = true;
-          io.disconnect();
-        }
-      },
-      { rootMargin: '300px' }
-    );
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        visible = true;
+        io.disconnect();
+      }
+    });
     io.observe(host);
     return () => io.disconnect();
   });

@@ -2,12 +2,13 @@
   import {
     Check,
     Layers,
-    Milestone,
+    GraduationCap,
     PartyPopper,
     ChevronDown,
     ChevronRight,
     Dumbbell,
-    List
+    List,
+    ArrowRight
   } from 'lucide-svelte';
   // Direct imports (not the '$lib/components' barrel) — this component is itself
   // re-exported from that barrel, so importing it back in would be a cycle.
@@ -20,7 +21,9 @@
     casesInSet,
     getSet,
     getCase,
+    getTechnique,
     type CoverageStep,
+    type MilestoneStep,
     type NextDrill
   } from '$lib/domain';
   import { personal } from '$lib/personal.svelte';
@@ -63,7 +66,12 @@
     return { drill: d, step, groupName, caseLabel };
   });
 
-  function nodeClasses(state: string, current: boolean): string {
+  const techniqueHref = (step: MilestoneStep, sectionId?: string) =>
+    `/techniques/${step.techniqueId}${sectionId ? `#${sectionId}` : ''}`;
+
+  function nodeClasses(kind: string, state: string, current: boolean): string {
+    // Milestones are reference/guide steps — never "mastered", never current.
+    if (kind === 'milestone') return 'border-border bg-surface-muted text-muted-foreground';
     if (state === 'complete') return 'border-emerald-500 bg-emerald-500 text-white';
     if (current)
       return 'border-brand-500 bg-brand-500 text-white ring-4 ring-brand-100 dark:ring-brand-500/25';
@@ -138,7 +146,8 @@
         {@const isLast = i === progress.steps.length - 1}
         {@const open = stageOpen(step.id, isCurrent)}
         {@const Icon =
-          sp.state === 'complete' ? Check : step.kind === 'milestone' ? Milestone : Layers}
+          step.kind === 'milestone' ? GraduationCap : sp.state === 'complete' ? Check : Layers}
+        {@const technique = step.kind === 'milestone' ? getTechnique(step.techniqueId) : undefined}
         {@const isNext = step.kind === 'coverage' && next?.step.id === step.id}
         <li class="relative flex gap-4">
           <!-- connector rail (masked behind each node) -->
@@ -153,7 +162,7 @@
           <span
             class={cn(
               'relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border',
-              nodeClasses(sp.state, isCurrent)
+              nodeClasses(step.kind, sp.state, isCurrent)
             )}
           >
             <Icon size={16} />
@@ -197,9 +206,9 @@
                     total={sp.total}
                     class="mt-2 max-w-md"
                   />
-                {:else if step.description}
+                {:else if technique?.description}
                   <span class="mt-1 block max-w-md text-sm text-muted-foreground">
-                    {step.description}
+                    {technique.description}
                   </span>
                 {/if}
               </span>
@@ -209,17 +218,26 @@
             {#if open}
               <div class="mt-3 ml-[1.4rem]">
                 {#if step.kind === 'milestone'}
-                  {#if step.items?.length}
-                    <ul class="space-y-1.5">
-                      {#each step.items as item (item.id)}
-                        <li class="text-sm">
-                          <span class="font-medium text-foreground">{item.label}</span>
-                          {#if item.description}
-                            <span class="text-muted-foreground"> — {item.description}</span>
-                          {/if}
+                  {#if technique}
+                    <ul class="space-y-1">
+                      {#each technique.sections as section (section.id)}
+                        <li>
+                          <a
+                            href={techniqueHref(step, section.id)}
+                            class="block rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                          >
+                            {section.name}
+                          </a>
                         </li>
                       {/each}
                     </ul>
+                    <a
+                      href={techniqueHref(step)}
+                      class="mt-2 ml-2 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-400"
+                    >
+                      View guide
+                      <ArrowRight size={14} />
+                    </a>
                   {/if}
                 {:else}
                   <ul class="space-y-2">

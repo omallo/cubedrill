@@ -44,19 +44,17 @@ export interface CoverageStep extends PathStepBase {
   slot?: F2LSlot;
 }
 
-/** A conceptual phase (Cross, intuitive F2L) — no cases, not drillable. */
+/**
+ * A conceptual phase (Cross, intuitive F2L) — no cases, not drillable. It links
+ * to a `Technique` (see `techniques.ts`), which owns the description and the
+ * ordered sections; the path resolves those rather than duplicating them.
+ */
 export interface MilestoneStep extends PathStepBase {
   kind: 'milestone';
-  /** The conceptual phase this belongs to (for section/icon). */
+  /** The conceptual phase this belongs to. */
   phaseId: PhaseId;
-  /** Optional ordered sub-checklist (e.g. Cross → basic, planning, X-cross). */
-  items?: MilestoneItem[];
-}
-
-export interface MilestoneItem {
-  id: string;
-  label: string;
-  description?: string;
+  /** The technique whose content (description + sections) backs this step. */
+  techniqueId: string;
 }
 
 /**
@@ -70,32 +68,13 @@ export interface MilestoneItem {
  * `f2l-slots.ts`), so the path only sequences the two authored slots.
  */
 export const cfopLearningPath: PathStep[] = [
-  {
-    kind: 'milestone',
-    id: 'cross',
-    label: 'Cross',
-    phaseId: 'cross',
-    description: 'Solve the four bottom-layer edges — the foundation every solve starts from.',
-    items: [
-      { id: 'basic', label: 'Basic cross', description: 'Build the cross reliably, any color.' },
-      {
-        id: 'inspection',
-        label: 'Plan the cross in inspection',
-        description: 'Solve the cross without looking — plan it in the 15s inspection.'
-      },
-      {
-        id: 'x-cross',
-        label: 'X-Cross',
-        description: 'Solve the cross and one F2L pair together in one go.'
-      }
-    ]
-  },
+  { kind: 'milestone', id: 'cross', label: 'Cross', phaseId: 'cross', techniqueId: 'cross' },
   {
     kind: 'milestone',
     id: 'intuitive-f2l',
     label: 'Intuitive F2L',
     phaseId: 'f2l',
-    description: 'Pair and insert each corner+edge by understanding, not memorized algorithms.'
+    techniqueId: 'intuitive-f2l'
   },
 
   { kind: 'coverage', id: 'two-look-oll', label: '2-Look OLL', setId: 'oll-2look' },

@@ -5,9 +5,11 @@
  */
 export * from './types';
 export * from './learning-path';
+export * from './techniques';
 export { catalog } from './catalog';
 
 import { catalog } from './catalog';
+import { techniques, type Technique } from './techniques';
 import type {
   Algorithm,
   AlgorithmSet,
@@ -24,9 +26,14 @@ const DEFAULT_SLOT: F2LSlot = 'FR';
 const phaseById = new Map(catalog.phases.map((p) => [p.id, p]));
 const setById = new Map(catalog.sets.map((s) => [s.id, s]));
 const caseById = new Map(catalog.cases.map((c) => [c.id, c]));
+const techniqueById = new Map(techniques.map((t) => [t.id, t]));
 
 export function getPhase(id: string): Phase | undefined {
   return phaseById.get(id);
+}
+
+export function getTechnique(id: string): Technique | undefined {
+  return techniqueById.get(id);
 }
 
 export function getSet(id: string): AlgorithmSet | undefined {

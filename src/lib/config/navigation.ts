@@ -1,4 +1,12 @@
-import { LayoutDashboard, Blocks, WandSparkles, Timer, ChartColumn, Settings } from 'lucide-svelte';
+import {
+  LayoutDashboard,
+  GraduationCap,
+  Blocks,
+  WandSparkles,
+  Timer,
+  ChartColumn,
+  Settings
+} from 'lucide-svelte';
 import type { IconComponent } from '$lib/types';
 
 export interface NavItem {
@@ -34,6 +42,12 @@ export const primaryNav: NavSection[] = [
   {
     title: 'Practice',
     items: [
+      {
+        label: 'Techniques',
+        href: '/techniques',
+        icon: GraduationCap,
+        description: 'Learn the conceptual phases — cross and intuitive F2L.'
+      },
       {
         label: 'Algorithms',
         href: '/algorithms',

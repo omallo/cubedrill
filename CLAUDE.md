@@ -54,20 +54,41 @@ Algorithm`; `Case ↔ Set` is many-to-many via `SetMembership` (carries
   jperm/PoC and are meant to be hand-curated.
 - **`src/lib/personal.svelte.ts`** — the personal layer (local-first), separate
   from the catalog. A `PersonalStore` runes class (mirrors `theme.svelte.ts`):
-  reactive `entries` keyed by `caseId`, mirrored to `localStorage`
-  (`cubedrill-personal`) on change. API: `status/setStatus/cycle/count`. Status is
-  per-case (shared across sets — e.g. OLL 27 in Full + 2-Look); absence ⇒
-  `not-learned` (entry dropped to keep storage lean). Authored algs are modelled
-  but not wired yet. (Algorithms carry no `id` — the planned alg-selection feature
-  will pick its own identifier scheme when it lands.)
+  reactive `entries` keyed by `caseId`, plus `authored` (user algorithms per case)
+  and `choices` (chosen algorithm per unit, identified by its **move string** —
+  algorithms carry no id), all mirrored to `localStorage` (`cubedrill-personal`).
+  API: `status/setStatus/cycle/count`; `algorithmsFor/chosenAlgorithm/setChoice/
+addAuthored/removeAuthored`. Status is per-case (shared across sets — e.g. OLL 27
+  in Full + 2-Look); absence ⇒ `not-learned` (entry dropped to keep storage lean).
+  `chosenAlgorithm` (their pick, else `primaryAlgorithm`) is what the list, trainer
+  and solver all drill/solve with.
+- **Other local-first stores** (same runes+localStorage pattern): `stats.svelte.ts`
+  (recall accuracy/latency — advisory), `solves.svelte.ts` (`cubedrill-solves`:
+  timed solves + penalties + WCA Ao5/Ao12), `goals.svelte.ts` (`cubedrill-goals`:
+  coverage goals, progress derived from `personal`), `smartcube.svelte.ts` (Bluetooth
+  smart-cube connection + live move stream; **dynamically** imports cubing so it
+  stays out of the main bundle), `palette.svelte.ts` (⌘K open state). `data.ts` does
+  export/import/reset over all `cubedrill-*` keys.
+- **`src/lib/solver/`** — the human-style CFOP solver (imports cubing.js; route-only).
+  `core.ts` is **framework-free** (cubing + type-only imports, node-testable via tsx):
+  flat cube state, move tables, projected pattern-DB heuristics, IDA\* `solveCross`/
+  `solveSlot`, plus kpuzzle helpers (`pattern`, `llOriented`, `isSolved`, `normalize`).
+  `recognize.ts` (OLL/PLL recognition by AUF×alg), `solve.ts` (orchestrates a
+  phase-by-phase `Solution`; joint OLL+PLL search handles symmetric-OLL dead-ends),
+  `candidates.ts` (LL algs from `personal.chosenAlgorithm`, `personalFirst` ordering),
+  `scramble.ts` (full + specialized scrambles via solve-to-phase / catalog F2L).
 - **`src/lib/components/`** — `ui/` (Button, Card, Badge), `layout/` (AppShell,
   Sidebar, Header, BrandLogo, ThemeToggle), `cube/` (CubePlayer, CaseDiagram, plus
   `orientation.ts` — net-rotation normalization + setup-scramble derivation),
   plus PageHeader/StatCard/PlaceholderView and the set-page pieces
   `LearningStatusControl` (+ exported `STATUS_META` colour map), `CaseFilterBar`,
-  `SetProgressBar`. Barrel `index.ts` re-exports everything **except `cube/`** and
-  `train/` — those statically pull in heavy cubing.js, so routes import them directly
-  (`$lib/components/cube`, `$lib/components/train/algorithm-trainer.svelte`) to keep
+  `SetProgressBar`, `CaseAlgorithms` (per-case alg selection + custom authoring).
+  `layout/` also has `command-palette.svelte` (⌘K search). `cube/` adds
+  `SolutionPlayer` (forward solve playback — cube starts at the scramble, not
+  inverted) and `validate.ts` (authored-alg validation via the cube engine). Barrel
+  `index.ts` re-exports everything **except `cube/`** and `train/` — those statically
+  pull in heavy cubing.js, so routes import them directly (`$lib/components/cube`,
+  `$lib/components/train/algorithm-trainer.svelte`, `case-algorithms.svelte`) to keep
   cubing out of the main bundle (route-level code splitting).
 - **`src/lib/components/train/algorithm-trainer.svelte`** — the recognition-first
   drilling loop. Takes a `pool: CaseInSet[]` (+ `setName`) and **snapshots it on
@@ -96,8 +117,15 @@ keepFocus, noScroll })`, read from `page.url.searchParams`; the same `CaseFilter
   drives both modes. Filtering re-runs through `personal.status()` so cycling a
   status re-filters live; the trainer drills exactly the filtered pool (keyed by
   set+filters so it re-snapshots on change). View and Train are deliberately one
-  hub (nav item "Algorithms") rather than separate Library/Train pages. Plus
-  placeholder pages for solver/solves/progress/settings.
+  hub (nav item "Algorithms") rather than separate Library/Train pages. Each list
+  row expands a `CaseAlgorithms` panel to pick/author the case's algorithm.
+  - **`/solver`** — scramble-type + solve-target controls, a `SolutionPlayer` with
+    per-phase step-through, and a breakdown flagging cases not in the user's set.
+  - **`/solves`** — a speedcubing timer (hold-space/touch to start, any key to stop;
+    smart-cube auto-times), +2/DNF penalties, WCA session stats, scramble preview.
+  - **`/progress`** — coverage headline stats, coverage **goals** + suggestions, an
+    advisory weak-case focus list (recall stats), per-phase coverage breakdown.
+  - **`/settings`** — appearance + data export/import/reset + account/sync note.
 
 ## cubing.js — hard-won gotchas (IMPORTANT)
 
@@ -195,27 +223,29 @@ case; `play()` solves). cubing.js default orientation is **white U, green F**.
   normalization + setup-scramble derivation (see the dedicated section above). Still
   deferred there: white-cross `z2` (the basis for **user-selectable cross-color**)
   and custom F2L mask orbits (only if the preset proves insufficient).
-- **F2L**: 11 of 41 BR algs missing; FL/BL mirroring not yet implemented; review
-  seeded algorithm choices.
-- **Algorithms hub** (formerly split Library/Train, now merged — see Routes) has:
-  grouped case lists, per-case learning status (local-first), URL-backed status+group
-  filtering, overview progress bars, and a **List/Train mode toggle** (recognition-first
-  drilling loop shares the same filtered selection).
-- **Train mode** still to refine when sessions land: **persist times/results** (the
-  recognition timer is feedback-only now), and a smart-cube path (PoC used
-  `gan-web-bluetooth`; not wired in the new app yet).
-- **Normal-cube drilling** — **done**: the trainer now shows a clean setup scramble
-  under the cube (`setupScramble`), so a non-smart-cube user can build the case on a
-  solved cube and execute. (Open question if it ever matters: it's shown during
-  recognition too — fine for the normal-cube path; revisit only if pure-recognition
-  drilling wants it hidden behind a toggle.)
-- Still to come:
-  - **Algorithm selection** — multiple algs per case + user picks one (needs a
-    stable per-alg identifier to persist the choice; the trainer currently drills
-    the `primary`/first alg).
-  - **Global ⌘K search** — the deferred text-search home (in-set text search was
-    intentionally skipped as low-value; see below).
-  - **F2L slot filter** in `CaseFilterBar` (stubbed; waits on the mirroring work).
+- **F2L data**: 11 of 41 BR algs missing (BR slots fall back to the FR primary —
+  visibly off-orientation); review seeded algorithm choices. This is **data curation**
+  needing authoritative reference algs, not a code gap. FL/BL mirroring is implemented
+  (`f2l-slots.ts` / `slotsForCase`).
+- **Solver** — **done** (`src/lib/solver/`): Cross + F2L by IDA\* search, OLL/PLL by
+  recognition against the user's chosen algorithms. Validated on 200 random scrambles
+  (0 wrong). Used by `/solver` and by `/solves`' scramble generation.
+- **Algorithm selection + authoring** — **done**: `CaseAlgorithms` panel per list row;
+  custom algs validated against the cube engine (`cube/validate.ts`); the chosen alg
+  drives list/trainer/solver.
+- **Solves + time tracking** — **done** (`/solves` + `solves.svelte.ts`): full and
+  partial-scramble timed solves with penalties and WCA session stats.
+- **Goals/progress/feedback** — **done** (`/progress` + `goals.svelte.ts`): coverage
+  goals + the advisory weak-case surface. Fluency/timing goals stay deferred to the
+  smart-cube era per TRAINING.md.
+- **Smart cube** — **done** (`smartcube.svelte.ts`): Bluetooth connect via cubing.js
+  (dynamically imported), live moves, and Solves auto-timing. Graceful where Web
+  Bluetooth is absent. Untestable without hardware — verify on a real GAN/GoCube.
+- **Global ⌘K search** — **done** (`command-palette.svelte`): cases (incl. set-relative
+  names), sets, techniques, pages.
+- **Recognition timer** — still feedback-only (not persisted); fine per TRAINING.md.
+- **F2L slot filter** in `CaseFilterBar` is still stubbed — the set-page header slot
+  selector (FR/FL/BR/BL/All) already covers slot focus, so this is low value.
 - **Filter design decisions** (agreed with user): group filter stays **single-select**
   (multi is niche; URL already uses comma-lists so `group=a,b` is a cheap upgrade
   later). In-set **text search dropped** — its real home is global ⌘K search.

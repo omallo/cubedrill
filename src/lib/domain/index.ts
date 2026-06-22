@@ -4,6 +4,7 @@
  * these helpers rather than indexing the raw arrays.
  */
 export * from './types';
+export * from './learning-path';
 export { catalog } from './catalog';
 
 import { catalog } from './catalog';

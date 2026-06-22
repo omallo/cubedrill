@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ArrowRight, Layers, Target, Gauge, Flame } from 'lucide-svelte';
-  import { PageHeader, StatCard, Card, Button } from '$lib/components';
+  import { ArrowRight } from 'lucide-svelte';
+  import { PageHeader, Card, Button, LearningPath } from '$lib/components';
   import { primaryNav } from '$lib/config/navigation';
 
   // Quick-start tiles reuse the "Practice" section from the nav config.
@@ -20,13 +20,8 @@
   {/snippet}
 </PageHeader>
 
-<!-- Overview stats (illustrative until training data exists) -->
-<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-  <StatCard label="Cases learned" value="—" icon={Layers} hint="Across your personal set" />
-  <StatCard label="In progress" value="—" icon={Target} hint="Currently learning" />
-  <StatCard label="Avg recognition" value="—" icon={Gauge} hint="Last 7 days" />
-  <StatCard label="Day streak" value="—" icon={Flame} hint="Keep it going" />
-</div>
+<!-- Learning path — the dashboard centerpiece -->
+<LearningPath />
 
 <!-- Quick start -->
 <section class="mt-8">

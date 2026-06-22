@@ -1,5 +1,14 @@
 <script lang="ts">
-  import { ArrowLeft, List, Dumbbell, Play, RotateCcw, FlipHorizontal2 } from 'lucide-svelte';
+  import {
+    ArrowLeft,
+    List,
+    Dumbbell,
+    Play,
+    RotateCcw,
+    FlipHorizontal2,
+    Layers,
+    ChevronDown
+  } from 'lucide-svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
   import {
@@ -9,6 +18,7 @@
     CaseFilterBar,
     CubeViewToggles
   } from '$lib/components';
+  import CaseAlgorithms from '$lib/components/case-algorithms.svelte';
   import { CaseDiagram } from '$lib/components/cube';
   // Imported directly (not via the barrel) so cubing.js stays out of the main bundle.
   import AlgorithmTrainer from '$lib/components/train/algorithm-trainer.svelte';
@@ -16,7 +26,6 @@
     getSet,
     getPhase,
     caseGroupsInSet,
-    primaryAlgorithm,
     slotsForCase,
     type CaseInSet,
     type F2LSlot,
@@ -167,6 +176,12 @@
   // Per-row CaseDiagram refs so the row's Play/Reset controls can drive the cube.
   const diagrams: Record<string, CaseDiagram> = $state({});
 
+  // Which rows have their algorithm panel (selection + authoring) expanded.
+  let expandedAlgs = $state<Record<string, boolean>>({});
+  function toggleAlgs(caseId: string) {
+    expandedAlgs = { ...expandedAlgs, [caseId]: !expandedAlgs[caseId] };
+  }
+
   // List-mode view shortcuts mirroring the trainer's (which owns these in train
   // mode via its own handler). Skipped while typing or with a modifier held.
   function onListKeydown(e: KeyboardEvent) {
@@ -286,66 +301,93 @@
           <Card class="divide-y divide-border">
             {#each section.cases as entry (entry.case.id)}
               {@const dslot = slotFor(entry, listSlot)}
-              {@const alg = primaryAlgorithm(entry.case, dslot)}
-              <div class="flex items-center gap-4 p-4">
-                <CaseDiagram
-                  moves={alg?.moves ?? ''}
-                  phaseId={entry.case.phaseId}
-                  visualization={display.resolveViz(phase)}
-                  hintFacelets={display.hintFacelets}
-                  class="w-24 shrink-0"
-                  bind:this={diagrams[entry.case.id]}
-                />
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-baseline gap-2">
-                    <span class="font-semibold text-foreground">{entry.label}</span>
-                    {#if dslot}
-                      <span
-                        class="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] font-medium text-muted-foreground"
-                        title={`Slot ${dslot}`}>{dslot}</span
-                      >
-                    {/if}
-                    {#if alg?.derived}
-                      <span
-                        class="inline-flex items-center gap-0.5 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"
-                        title="Mirror-derived algorithm"
-                      >
-                        <FlipHorizontal2 size={11} /> mirror
-                      </span>
-                    {/if}
-                    {#if entry.case.nickname}
-                      <span class="text-sm text-muted-foreground">{entry.case.nickname}</span>
-                    {/if}
+              {@const alg = personal.chosenAlgorithm(entry.case, dslot)}
+              {@const algCount = personal.algorithmsFor(entry.case, dslot).length}
+              {@const open = expandedAlgs[entry.case.id]}
+              <div class="p-4">
+                <div class="flex items-center gap-4">
+                  <CaseDiagram
+                    moves={alg?.moves ?? ''}
+                    phaseId={entry.case.phaseId}
+                    visualization={display.resolveViz(phase)}
+                    hintFacelets={display.hintFacelets}
+                    class="w-24 shrink-0"
+                    bind:this={diagrams[entry.case.id]}
+                  />
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-baseline gap-2">
+                      <span class="font-semibold text-foreground">{entry.label}</span>
+                      {#if dslot}
+                        <span
+                          class="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] font-medium text-muted-foreground"
+                          title={`Slot ${dslot}`}>{dslot}</span
+                        >
+                      {/if}
+                      {#if alg?.derived}
+                        <span
+                          class="inline-flex items-center gap-0.5 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"
+                          title="Mirror-derived algorithm"
+                        >
+                          <FlipHorizontal2 size={11} /> mirror
+                        </span>
+                      {/if}
+                      {#if entry.case.nickname}
+                        <span class="text-sm text-muted-foreground">{entry.case.nickname}</span>
+                      {/if}
+                    </div>
+                    <div class="mt-1 font-mono text-sm break-words text-muted-foreground">
+                      {alg?.moves}
+                    </div>
                   </div>
-                  <div class="mt-1 font-mono text-sm break-words text-muted-foreground">
-                    {alg?.moves}
+                  <div class="flex shrink-0 items-center gap-1 text-muted-foreground">
+                    <button
+                      type="button"
+                      onclick={() => diagrams[entry.case.id]?.play()}
+                      aria-label="Play algorithm"
+                      title="Play"
+                      class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+                    >
+                      <Play size={16} class="translate-x-px" />
+                    </button>
+                    <button
+                      type="button"
+                      onclick={() => diagrams[entry.case.id]?.reset()}
+                      aria-label="Reset cube"
+                      title="Reset"
+                      class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
+                    >
+                      <RotateCcw size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      onclick={() => toggleAlgs(entry.case.id)}
+                      aria-expanded={open}
+                      aria-label="Algorithms"
+                      title="Algorithms & custom"
+                      class={cn(
+                        'flex h-8 cursor-pointer items-center gap-1 rounded-md px-2 text-xs font-medium transition-colors hover:bg-accent hover:text-foreground',
+                        open && 'bg-accent text-foreground'
+                      )}
+                    >
+                      <Layers size={15} />
+                      {algCount}
+                      <ChevronDown
+                        size={13}
+                        class={cn('transition-transform', open && 'rotate-180')}
+                      />
+                    </button>
                   </div>
+                  <LearningStatusControl
+                    status={personal.status(entry.case.id, dslot)}
+                    oncycle={() => personal.cycle(entry.case.id, dslot)}
+                    class="shrink-0"
+                  />
                 </div>
-                <div class="flex shrink-0 items-center gap-1 text-muted-foreground">
-                  <button
-                    type="button"
-                    onclick={() => diagrams[entry.case.id]?.play()}
-                    aria-label="Play algorithm"
-                    title="Play"
-                    class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
-                  >
-                    <Play size={16} class="translate-x-px" />
-                  </button>
-                  <button
-                    type="button"
-                    onclick={() => diagrams[entry.case.id]?.reset()}
-                    aria-label="Reset cube"
-                    title="Reset"
-                    class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground"
-                  >
-                    <RotateCcw size={16} />
-                  </button>
-                </div>
-                <LearningStatusControl
-                  status={personal.status(entry.case.id, dslot)}
-                  oncycle={() => personal.cycle(entry.case.id, dslot)}
-                  class="shrink-0"
-                />
+                {#if open}
+                  <div class="mt-3 border-t border-border pt-3 pl-28">
+                    <CaseAlgorithms case={entry.case} slot={dslot} />
+                  </div>
+                {/if}
               </div>
             {/each}
           </Card>

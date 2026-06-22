@@ -7,13 +7,16 @@
  * This module reads the catalog (and so is app-only, not part of the
  * framework-free solver core).
  */
-import { casesInSet, getSet, primaryAlgorithm } from '$lib/domain';
+import { casesInSet, getSet } from '$lib/domain';
+import { personal } from '$lib/personal.svelte';
 import type { LLCandidate } from './recognize';
 
 function candidatesFor(setId: string): LLCandidate[] {
   if (!getSet(setId)) return [];
   return casesInSet(setId).flatMap(({ case: c, label }) => {
-    const alg = primaryAlgorithm(c);
+    // The user's chosen algorithm (their authored/selected one, else the
+    // recommended built-in) so the solution mirrors what they're learning.
+    const alg = personal.chosenAlgorithm(c);
     return alg ? [{ caseId: c.id, name: label, moves: alg.moves }] : [];
   });
 }

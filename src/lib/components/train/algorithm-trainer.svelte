@@ -24,7 +24,6 @@
   import { setupScramble } from '$lib/components/cube/orientation';
   import {
     getPhase,
-    primaryAlgorithm,
     type Algorithm,
     type CaseId,
     type CaseInSet,
@@ -114,7 +113,7 @@
 
   const current = $derived(cases[order[pos]]);
   const alg = $derived<Algorithm | undefined>(
-    current ? primaryAlgorithm(current.case, current.slot) : undefined
+    current ? personal.chosenAlgorithm(current.case, current.slot) : undefined
   );
   const stat = $derived(current ? stats.get(current.case.id, current.slot) : undefined);
 

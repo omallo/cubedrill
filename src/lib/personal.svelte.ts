@@ -2,6 +2,9 @@ import { browser } from '$app/environment';
 import {
   slotsForCase,
   getCase,
+  primaryAlgorithm,
+  type Algorithm,
+  type Case,
   type CaseId,
   type F2LSlot,
   type LearningStatus,
@@ -37,6 +40,10 @@ function entryKey(caseId: CaseId, slot?: F2LSlot): string {
 class PersonalStore {
   /** Keyed by `entryKey`. Absence implies 'not-learned'. */
   entries = $state<Record<string, PersonalEntry>>({});
+  /** User-authored algorithms, keyed by caseId (F2L entries carry a `slot`). */
+  authored = $state<Record<CaseId, Algorithm[]>>({});
+  /** Chosen algorithm per tracking unit, identified by its move string. */
+  choices = $state<Record<string, string>>({});
 
   constructor() {
     if (!browser) return;
@@ -49,6 +56,20 @@ class PersonalStore {
           if (entry && isStatus((entry as PersonalEntry).status)) {
             this.entries[key] = entry as PersonalEntry;
           }
+        }
+      }
+      if (parsed?.authored && typeof parsed.authored === 'object') {
+        for (const [id, algs] of Object.entries(parsed.authored)) {
+          if (Array.isArray(algs)) {
+            this.authored[id] = algs.filter(
+              (a): a is Algorithm => !!a && typeof (a as Algorithm).moves === 'string'
+            );
+          }
+        }
+      }
+      if (parsed?.choices && typeof parsed.choices === 'object') {
+        for (const [key, moves] of Object.entries(parsed.choices)) {
+          if (typeof moves === 'string') this.choices[key] = moves;
         }
       }
     } catch {
@@ -107,9 +128,67 @@ class PersonalStore {
     return n;
   }
 
+  // --- Authored algorithms & selection -------------------------------------
+
+  /**
+   * The algorithms selectable for a case in a given slot context: the built-in
+   * ones (filtered to the slot for F2L) followed by the user's authored ones,
+   * each flagged as `authored` and whether it's the current `chosen` pick.
+   */
+  algorithmsFor(c: Case, slot?: F2LSlot): { alg: Algorithm; authored: boolean; chosen: boolean }[] {
+    const builtin = c.algorithms.filter((a) => (slot ? a.slot === slot : true));
+    const authored = (this.authored[c.id] ?? []).filter((a) => (slot ? a.slot === slot : true));
+    const chosenMoves = this.choices[entryKey(c.id, slot)];
+    const fallback = primaryAlgorithm(c, slot)?.moves;
+    const effective = chosenMoves ?? fallback;
+    return [
+      ...builtin.map((alg) => ({ alg, authored: false, chosen: alg.moves === effective })),
+      ...authored.map((alg) => ({ alg, authored: true, chosen: alg.moves === effective }))
+    ];
+  }
+
+  /** The algorithm the user drills/solves with for a unit: their pick, else the
+   *  recommended built-in one. */
+  chosenAlgorithm(c: Case, slot?: F2LSlot): Algorithm | undefined {
+    const chosenMoves = this.choices[entryKey(c.id, slot)];
+    if (chosenMoves) {
+      const all = [...c.algorithms, ...(this.authored[c.id] ?? [])];
+      const match = all.find((a) => a.moves === chosenMoves);
+      if (match) return match;
+    }
+    return primaryAlgorithm(c, slot);
+  }
+
+  /** Pick (or, if already chosen, keep) an algorithm for a unit by its moves. */
+  setChoice(caseId: CaseId, slot: F2LSlot | undefined, moves: string): void {
+    this.choices[entryKey(caseId, slot)] = moves;
+    this.#save();
+  }
+
+  /** Add a user-authored algorithm to a case (no-op if an identical one exists). */
+  addAuthored(caseId: CaseId, alg: Algorithm): void {
+    const list = this.authored[caseId] ?? [];
+    if (list.some((a) => a.moves === alg.moves && a.slot === alg.slot)) return;
+    this.authored[caseId] = [...list, alg];
+    this.#save();
+  }
+
+  /** Remove an authored algorithm, clearing any choice that pointed at it. */
+  removeAuthored(caseId: CaseId, moves: string): void {
+    this.authored[caseId] = (this.authored[caseId] ?? []).filter((a) => a.moves !== moves);
+    if (this.authored[caseId].length === 0) delete this.authored[caseId];
+    for (const [key, m] of Object.entries(this.choices)) {
+      if ((key === caseId || key.startsWith(`${caseId}:`)) && m === moves) delete this.choices[key];
+    }
+    this.#save();
+  }
+
   #save(): void {
     if (!browser) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ entries: this.entries }));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ entries: this.entries, authored: this.authored, choices: this.choices })
+    );
   }
 }
 

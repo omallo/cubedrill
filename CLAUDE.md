@@ -2,8 +2,10 @@
 
 Cubedrill is a web app for speedcubers to assemble, learn, train, and track a
 personal repertoire of solving algorithms (CFOP-first). See **`VISION.md`** for
-the product vision and **`DOMAIN.md`** for the domain model & vocabulary — read
-both before non-trivial work.
+the product vision, **`DOMAIN.md`** for the domain model & vocabulary, and
+**`TRAINING.md`** for the training model & signal design (the drilling loop,
+stats, and learning-path conception) — read the relevant ones before non-trivial
+work.
 
 A small proof-of-concept lives at **`~/dev/archive/cubedrill`** (minimal, more
 functional-than-polished). Study it for reference; don't copy blindly — the new

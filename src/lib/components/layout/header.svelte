@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { Menu, Bluetooth, Keyboard, Loader2 } from 'lucide-svelte';
+  import { Menu, Bluetooth, Keyboard, Loader2, Search } from 'lucide-svelte';
   import { page } from '$app/state';
   import { allNavItems } from '$lib/config/navigation';
   import { Button } from '$lib/components/ui';
   import { shortcutsOverlay } from '$lib/shortcuts.svelte';
+  import { commandPalette } from '$lib/palette.svelte';
   import { smartCube } from '$lib/smartcube.svelte';
   import ThemeToggle from './theme-toggle.svelte';
 
@@ -39,7 +40,27 @@
 
   <h1 class="text-base font-semibold text-foreground">{pageTitle}</h1>
 
+  <!-- ⌘K search — a compact trigger that opens the global command palette. -->
+  <button
+    type="button"
+    onclick={() => commandPalette.show()}
+    class="ml-4 hidden h-9 w-56 cursor-pointer items-center gap-2 rounded-lg border border-border bg-background px-3 text-sm text-muted-foreground transition-colors hover:bg-accent md:flex"
+  >
+    <Search size={15} />
+    <span>Search…</span>
+    <kbd class="ml-auto rounded border border-border px-1.5 py-0.5 text-[10px]">⌘K</kbd>
+  </button>
+
   <div class="ml-auto flex items-center gap-1">
+    <Button
+      variant="ghost"
+      size="icon"
+      class="md:hidden"
+      onclick={() => commandPalette.show()}
+      aria-label="Search"
+    >
+      <Search size={20} />
+    </Button>
     <!-- Smart-cube connection — an optional progressive enhancement. -->
     {#if smartCube.status === 'connected'}
       <Button

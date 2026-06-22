@@ -21,6 +21,7 @@ export const SHORTCUTS: ShortcutGroup[] = [
   {
     context: 'Global',
     shortcuts: [
+      { keys: ['⌘', 'K'], description: 'Search cases, sets and pages' },
       { keys: ['?'], description: 'Show this keyboard-shortcuts reference' },
       { keys: ['Esc'], description: 'Close dialogs and the mobile menu' }
     ]

@@ -4,6 +4,7 @@
   import Sidebar from './sidebar.svelte';
   import Header from './header.svelte';
   import KeyboardShortcuts from './keyboard-shortcuts.svelte';
+  import CommandPalette from './command-palette.svelte';
 
   type Props = {
     children?: Snippet;
@@ -51,5 +52,8 @@
 
 <!-- Global keyboard-shortcuts overlay (opens on `?`, mounted once). -->
 <KeyboardShortcuts />
+
+<!-- Global ⌘K command palette (search cases, sets, pages), mounted once. -->
+<CommandPalette />
 
 <svelte:window onkeydown={(e) => e.key === 'Escape' && closeMobile()} />

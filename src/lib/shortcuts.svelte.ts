@@ -33,15 +33,16 @@ export const SHORTCUTS: ShortcutGroup[] = [
     ]
   },
   {
-    context: 'Algorithms · Train view',
+    context: 'Algorithms · Recall drill',
     shortcuts: [
-      { keys: ['Space'], description: 'Start · reveal solution · next case' },
-      { keys: ['←'], description: 'Previous case' },
-      { keys: ['→'], description: 'Next case' },
+      { keys: ['Space'], description: 'Reveal solution · then grade “Got it” and advance' },
+      { keys: ['1', '2', '3'], description: 'Grade recall: got it · hesitated · blanked' },
+      { keys: ['←'], description: 'Previous case (no grade)' },
+      { keys: ['→'], description: 'Next case (no grade)' },
       { keys: ['p'], description: 'Play the algorithm' },
       { keys: ['r'], description: 'Reset the cube' },
       { keys: ['s'], description: 'Toggle shuffle order' },
-      { keys: ['c'], description: 'Toggle the setup scramble' },
+      { keys: ['t'], description: 'Show / hide the session summary' },
       { keys: ['h'], description: 'Toggle hint facelets' },
       { keys: ['v'], description: 'Toggle 2D / 3D view' },
       { keys: ['m'], description: 'Cycle the learning status' }

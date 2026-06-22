@@ -5,6 +5,7 @@
   import SolutionPlayer from '$lib/components/cube/solution-player.svelte';
   import { generateScramble, SCRAMBLE_OPTIONS, type ScrambleType } from '$lib/solver';
   import { solves, formatTime, effectiveMs, type Penalty } from '$lib/solves.svelte';
+  import { smartCube } from '$lib/smartcube.svelte';
   import { display } from '$lib/display.svelte';
   import { cn } from '$lib/utils/cn';
 
@@ -116,6 +117,19 @@
     clearTimeout(armTimer);
   });
 
+  // Smart-cube auto-timing: the first turn starts the timer, and a solved cube
+  // stops it — move-accurate, no keypress needed (VISION §5.9). Manual Space
+  // still works; without a connected cube none of this runs.
+  $effect(() => {
+    if (smartCube.status !== 'connected') return;
+    return smartCube.onMove(() => {
+      if (phase === 'idle') startTimer();
+    });
+  });
+  $effect(() => {
+    if (smartCube.solved && phase === 'running') stopTimer();
+  });
+
   const timerColor = $derived(
     phase === 'ready'
       ? 'text-emerald-500'
@@ -174,7 +188,12 @@
         {formatTime(display_ms)}
       </div>
       <p class="absolute bottom-5 text-xs text-muted-foreground">
-        {#if phase === 'running'}
+        {#if smartCube.status === 'connected'}
+          <span class="inline-flex items-center gap-1.5">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            Smart cube connected — turn to start, solve to stop
+          </span>
+        {:else if phase === 'running'}
           Press any key to stop
         {:else}
           Hold <kbd class="rounded border border-border px-1">Space</kbd> (or touch), release to start
